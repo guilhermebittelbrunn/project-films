@@ -50,8 +50,58 @@ const movies = [
     imageBg: '/images/slide6b.webp',
     title: 'Black mirror',
     description: 'teste'
-  
   }
+    ,
+  {
+    id: 7,
+    image: '/images/slide3.jpg',
+    imageBg: '/images/slide3b.webp',
+    title: 'The rain',
+    description: 'teste'
+  }
+  ,
+  {
+    id: 8,
+    image: '/images/slide4.jpg',
+    imageBg: '/images/slide4b.webp',
+    title: 'Sex education',
+    description: 'teste'
+  }
+  ,
+  {
+    id: 9,
+    image: '/images/slide5.jpg',
+    imageBg: '/images/slide5b.webp',
+    title: 'Elite',
+    description: 'teste'
+  }
+  ,
+    ,
+  {
+    id: 10,
+    image: '/images/slide3.jpg',
+    imageBg: '/images/slide3b.webp',
+    title: 'The rain',
+    description: 'teste'
+  }
+  ,
+  {
+    id: 11,
+    image: '/images/slide4.jpg',
+    imageBg: '/images/slide4b.webp',
+    title: 'Sex education',
+    description: 'teste'
+  }
+  ,
+  {
+    id: 12,
+    image: '/images/slide5.jpg',
+    imageBg: '/images/slide5b.webp',
+    title: 'Elite',
+    description: 'teste'
+  }
+  ,
+  
 ];
 
 class App extends Component {
