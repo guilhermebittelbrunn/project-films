@@ -1,0 +1,14 @@
+{
+  "name": "movie-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.9",
+    "express": "^4.18.2",
+    "sequelize": "^6.33.0",
+    "sqlite3": "^5.1.6"
+  }
+}
