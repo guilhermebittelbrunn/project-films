@@ -4,7 +4,7 @@ const Router = express.Router();
 const { UserController, MovieController } = require("./controllers/index");
 
 Router.get("/user/create", UserController.post);
-Router.get("/user/login", UserController.postLogin);
+Router.post("/user/login", UserController.postLogin);
 
 Router.get("/movie/genres", MovieController.getByGenres);
 Router.get("/movie/:id", MovieController.get);

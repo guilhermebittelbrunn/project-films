@@ -25,27 +25,23 @@ const UserController = {
         }
     },
     postLogin: async (req, res) => {
-        // const { email, password } = req;
-
-        const test = {
-            email: "admin@teste.com",
-            senha: "ZEDchuva123",
-        };
-
+        const { email, password } = req.body;
+        console.log(email, password);
         try {
             const user = await User.findOne({
                 raw: true,
-                where: {
-                    email: test.email,
-                },
+                where: { email },
             });
-            if (bcrypt.compareSync(test.senha, user.password)) {
-                return res.send(`Bem-vindo ${user.name}`);
+            if (user) {
+                if (bcrypt.compareSync(password, user.password)) {
+                    const { password, ...rest } = user;
+                    return res.status(200).send(JSON.stringify(rest));
+                }
             }
-            throw "error";
+            throw 403;
         } catch (error) {
             console.log(error);
-            res.send("E-mail ou senha incorretos");
+            return res.status(403).send("not found");
         }
 
         // res.send(user);
