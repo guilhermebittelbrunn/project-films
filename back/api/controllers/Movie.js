@@ -1,6 +1,7 @@
 const Movie = require("../modules/Movie");
 const Streaming = require("../modules/Streaming");
 const Genre = require("../modules/Genre");
+const path = require("path");
 
 const MovieController = {
     get: async (req, res) => {
@@ -70,6 +71,22 @@ const MovieController = {
         } catch (error) {
             res.send(error);
         }
+    },
+    getProvider: async (req, res) => {
+        const Streamings = await Streaming.findAll({ raw: true });
+        const teste = Streamings.map((stmg) => {
+            const bff = Buffer.from(path.join(__dirname, `../../public/${stmg.icon_path}`).toString("base64"));
+            // const pathIMG = path.join(__dirname, `../../public/${stmg.icon_path}`);
+            return { ...stmg, path: bff };
+        });
+        // const imgPATH = ;
+        // res.sendFile(imgPATH);
+
+        res.send(teste);
+    },
+    getProviderrr: async (req, res) => {
+        const teste = path.join(__dirname, `../../public/Netflix.jpg`);
+        res.sendFile(teste);
     },
 };
 
