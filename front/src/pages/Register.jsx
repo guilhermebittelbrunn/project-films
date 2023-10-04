@@ -16,22 +16,17 @@ export default function Register(){
 
     useEffect(()=>{
         (async()=>{
-            // const res = await axios.get('api/movie/provider');
-            // console.log(res.blob);
 
 
-            const res = await axios.get('api/movie/providerrr', {responseType: 'blob'});
-            const urlIMG = URL.createObjectURL(res.data);
-            setData(urlIMG);
-
-            // const urlCreator = window.URL
-            // const arrayBuffer = new Uint8Array([res.data]).buffer;
-            // const blob = new Blob([arrayBuffer], { type: 'image/jpg' }); // Substitua 'jpeg' pelo formato da imagem, se necessário
-            // console.log(arrayBuffer);
-            // const imageUrl = URL.createObjectURL(blob);
-            // const teste = urlCreator.createObjectURL(blob);
+            // const res = await axios.get('api/movie/providerrr', {responseType: 'blob'});
             // console.log(res.data);
-            // setData(blob);
+            // const urlIMG = URL.createObjectURL(res.data);
+            // console.log(urlIMG);
+            // setData(urlIMG);
+            
+            const res2 = await axios.get('api/movie/provider');
+            console.log(res2.data[0].path)
+            console.log(URL.createObjectURL(res2.data[0].path, {type: 'image/jpeg'}))
         })()
     },[])
 
@@ -50,9 +45,12 @@ export default function Register(){
 
             <div>
                 <div id='card'>
-                    {/* <img src="https://www.w3schools.com/images/picture.jpg" alt="Mountain" style="width:300px"></img> */}
                     {data && 
-                        <img src={data}  width={50} height={50} alt="teste" />
+                        // <img src={data}  width={50} height={50} alt="teste" />
+                        data.map((img, k)=>{
+                            // console.log(URL.createObjectURL(img.path))
+                            return <img key={k} src={img.path} alt={img.path} width={50} height={50}/>
+                        })
                     }
                 </div>
             </div>

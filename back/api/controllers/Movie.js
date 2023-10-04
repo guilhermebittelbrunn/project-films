@@ -2,6 +2,8 @@ const Movie = require("../modules/Movie");
 const Streaming = require("../modules/Streaming");
 const Genre = require("../modules/Genre");
 const path = require("path");
+const fs = require("fs");
+const Blob = require("node:buffer");
 
 const MovieController = {
     get: async (req, res) => {
@@ -75,13 +77,18 @@ const MovieController = {
     getProvider: async (req, res) => {
         const Streamings = await Streaming.findAll({ raw: true });
         const teste = Streamings.map((stmg) => {
-            const bff = Buffer.from(path.join(__dirname, `../../public/${stmg.icon_path}`).toString("base64"));
+            // const bff = Buffer.from(path.join(__dirname, `../../public/${stmg.icon_path}`));
+            const pathImg = path.join(__dirname, `../../public/${stmg.icon_path}.jpg`);
+            const imgBuffer = fs.readFileSync(pathImg);
+            // console.log(pathImg);
+            const blob = Buffer.from([imgBuffer], { type: "image/jpeg" });
+            // console.log(blob);
             // const pathIMG = path.join(__dirname, `../../public/${stmg.icon_path}`);
-            return { ...stmg, path: bff };
+            return { ...stmg, path: imgBuffer };
         });
         // const imgPATH = ;
         // res.sendFile(imgPATH);
-
+        console.log("-------------", teste[1].path);
         res.send(teste);
     },
     getProviderrr: async (req, res) => {
