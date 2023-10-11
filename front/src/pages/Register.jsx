@@ -4,6 +4,7 @@ import { UserContext } from '../context/UserContext';
 import axios from 'axios'
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {listOfStreamingIcons} from '../assets/images'
 
 export default function Register(){
     const { control, handleSubmit } = useForm()
@@ -44,16 +45,19 @@ export default function Register(){
             </form> 
 
             <div>
-                <div id='card'>
-                    {data && 
-                        // <img src={data}  width={50} height={50} alt="teste" />
-                        data.map((img, k)=>{
-                            // console.log(URL.createObjectURL(img.path))
-                            return <img key={k} src={img.path} alt={img.path} width={50} height={50}/>
-                        })
-                    }
+                <div className='flex w-4/5 gap-2 flex-wrap bg-red-300 w-8/12 p-2'>
+                    
+                    {listOfStreamingIcons.map((streaming, key)=>{
+                        return (
+                            <div id='card' key={key} className='bg-blue-950 flex flex-col rounded-md w-[90px] h-[120px] justify-center items-center'>
+                                <img src={streaming} alt={`${streaming}`} className='w-[80%]'/>
+                                <span>name</span>
+                            </div>
+                        )
+                    })}
                 </div>
             </div>
+            
             
         </>
     )
