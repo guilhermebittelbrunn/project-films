@@ -15,40 +15,85 @@ import Pluto_TV from "./Pluto_TV.jpg";
 import Star_Plus from "./Star_Plus.jpg";
 import TNTGo from "./TNTGo.jpg";
 
-export const listOfStreamingIcons = [
-    Amazon_Prime_Video,
-    Amazon_Video,
-    Apple_TV,
-    Claro_video,
-    Crunchyroll,
-    Disney_Plus,
-    Globoplay,
-    Google_play,
-    HBO_Max,
-    Microsoft_Store,
-    Netflix,
-    Oi_Play,
-    Paramount_Plus,
-    Pluto_TV,
-    Star_Plus,
-    TNTGo,
-];
-
-export const objectStreamingIcons = [
-    Amazon_Prime_Video,
-    Amazon_Video,
-    Apple_TV,
-    Claro_video,
-    Crunchyroll,
-    Disney_Plus,
-    Globoplay,
-    Google_play,
-    HBO_Max,
-    Microsoft_Store,
-    Netflix,
-    Oi_Play,
-    Paramount_Plus,
-    Pluto_TV,
-    Star_Plus,
-    TNTGo,
+export const listOfStreaming = [
+    {
+        id: 2,
+        icon: Apple_TV,
+        name: "Apple TV",
+    },
+    {
+        id: 3,
+        icon: Google_play,
+        name: "Google Play",
+    },
+    {
+        id: 8,
+        icon: Netflix,
+        name: "Netflix",
+    },
+    {
+        id: 10,
+        icon: Amazon_Video,
+        name: "Amazon Video",
+    },
+    {
+        id: 68,
+        icon: Microsoft_Store,
+        name: "Microsoft_Store",
+    },
+    {
+        id: 119,
+        icon: Amazon_Prime_Video,
+        name: "Amazon Prime",
+    },
+    {
+        id: 167,
+        icon: Claro_video,
+        name: "Claro Video",
+    },
+    {
+        id: 283,
+        icon: Crunchyroll,
+        name: "Crunchyroll",
+    },
+    {
+        id: 300,
+        icon: Pluto_TV,
+        name: "Pluto TV",
+    },
+    {
+        id: 307,
+        icon: Globoplay,
+        name: "Globoplay",
+    },
+    {
+        id: 337,
+        icon: Disney_Plus,
+        name: "Disney Plus",
+    },
+    {
+        id: 384,
+        icon: HBO_Max,
+        name: "HBO Max",
+    },
+    {
+        id: 512,
+        icon: TNTGo,
+        name: "TNTGo",
+    },
+    {
+        id: 531,
+        icon: Paramount_Plus,
+        name: "Paramount Plus",
+    },
+    {
+        id: 571,
+        icon: Oi_Play,
+        name: "Oi Play",
+    },
+    {
+        id: 619,
+        icon: Star_Plus,
+        name: "Star Plus",
+    },
 ];
