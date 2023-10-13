@@ -74,10 +74,17 @@ const MovieController = {
         }
     },
     getMostPopular: async (req, res) => {
-        const movies = await Movie.findAll({
-            raw: true,
-            order: [["score_popularity", "desc"]],
-        });
+        try {
+            const movies = await Movie.findAll({
+                limit: 78,
+                raw: true,
+                order: [["score_popularity", "desc"]],
+            });
+            console.log(movies);
+            res.send(movies);
+        } catch (error) {
+            res.send(error);
+        }
     },
 };
 

@@ -3,44 +3,22 @@
 @tailwind utilities;
 
 
-.content {
-    margin-top: 40px;
-    height: 300px;
-    position: relative;
+#movie-section::-webkit-scrollbar {
+    width: 8px;
+    /* width of the entire scrollbar */
 }
 
-.background {
-    display: flex;
-    height: 100%;
+#movie-section::-webkit-scrollbar-track {
+    background: #171717;
+    /* color of the tracking area */
 }
 
-.left {
-    background: black;
-    width: 30%;
-    position: relative;
-}
+#movie-section::-webkit-scrollbar-thumb {
+    background-color: #09B54E;
 
-.left:before {
-    content: '';
-    position: absolute;
-    background-image: linear-gradient(to right, #000, transparent);
-    top: 0;
-    bottom: 0;
-    left: 100%;
-    width: 275px;
-}
-
-.right {
-    background: green;
-    width: 70%;
-}
-
-.content-container {
-    color: white;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 30px
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+    border: 1px solid #09B54E;
+    /* creates padding around scroll thumb */
 }
