@@ -18,10 +18,10 @@ export default function Register(){
         const {name, email, password, confirm_password} = data;
         const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         
-        if(name.trim().length < 3 || name === undefined) return message.warning('Informe um nome');
-        if(!regex.test(email)) return message.warning('Informe um e-mail válido');
-        if(password.trim().length < 8 && confirm_password.trim().length < 8) return message.warning('Informe um senha com pelo menos 8 caracteres');
-        if(password !== confirm_password) return message.warning('Senhas não coicidem');
+        // if(name.trim().length < 3 || name === undefined) return message.warning('Informe um nome');
+        // if(!regex.test(email)) return message.warning('Informe um e-mail válido');
+        // if(password.trim().length < 8 && confirm_password.trim().length < 8) return message.warning('Informe um senha com pelo menos 8 caracteres');
+        // if(password !== confirm_password) return message.warning('Senhas não coicidem');
             
         setPhase(pv=>pv+1)
     }
@@ -57,10 +57,11 @@ export default function Register(){
     }
 
     function handleSubmitForm(data){
-        const favoriteProviders = providersList.filter(provider=>provider.status);
-        const favoriteMovies = movies.filter(movie=>movie.status);
-        const userData = {...data, streamings: favoriteProviders, movies: favoriteMovies}
-        console.log(userData);
+        // const favoriteProviders = providersList.filter(provider=>provider.status);
+        // const favoriteMovies = movies.filter(movie=>movie.status);
+        // const userData = {...data, streamings: favoriteProviders, movies: favoriteMovies}
+        // console.log(userData);
+        setPhase(pv=>pv+1);
     }
 
     useEffect(()=>{
@@ -74,7 +75,11 @@ export default function Register(){
                 message.error('Um erro ocorreu ao carregar os filmes, por favor tente novamente mais tarde');
             }
         })()
-    },[])
+    },[]);
+
+    useEffect(()=>{
+        console.log(phase)
+    },[phase]);
 
     return(
         <>
@@ -144,7 +149,7 @@ export default function Register(){
                         </>
                     }
                     {
-                        phase === 3 &&
+                        (phase === 3 || phase === 4) &&
                         <div className='flex flex-col justify-center text-center items-center w-full px-2'>
                             <h1 className='font-bold text-xl mb-4'>Escolha seus filmes favoritos</h1>     
                                 <div>
@@ -166,6 +171,25 @@ export default function Register(){
                             <div id='btns' className='flex font-semibold w-full justify-between px-4 gap-2 text-lg mt-2 max-sm:flex-col max-sm:my-6 max-sm:items-center'>
                                 <button className='py-2 px-4 rounded-sm border-[1px] border-primary w-[180px] max-sm:text-base max-sm:py-1 max-sm:px-2 max-sm:w-4/5 max-sm:order-2 lg:opacity-70 hover:opacity-100' onClick={()=>{setPhase(pv=>pv-1)}}>Anterior</button>
                                 <button type='submit' className='py-2 px-4 border-[1px] border-primary w-[180px] max-sm:text-base max-sm:py-1 max-sm:px-2  max-sm:w-4/5 max-sm:order-1 lg:opacity-70 hover:opacity-100'>Criar conta</button>
+                            </div>
+                        </div>
+                    }
+                    {
+                        phase === 4 &&
+                        <div className='bg-blue-800 flex flex-col justify-between py-6 items-center w-[400px] h-[500px] absolute top-2/4 left-2/4 transform translate-x-[-50%] translate-y-[-50%]'>
+                            <h2>Confirmar dados</h2>
+                            <div>
+                                <h3>Filmes</h3>
+                                <p>{movies.map(movie=>{
+                                        if(movie.status){
+                                            return <span>{movie.title}</span>
+                                        }
+                                })}
+                                </p>
+                            </div>
+                            <div className='flex justify-around w-full'>
+                                <button>Cancelar</button>
+                                <button>Confirmar</button>
                             </div>
                         </div>
                     }

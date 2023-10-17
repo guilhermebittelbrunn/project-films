@@ -4,25 +4,26 @@ const salt = 10;
 
 const UserController = {
     post: async (req, res) => {
-        const newUser = {
-            name: "Guilherme",
-            email: "admin@teste.com",
-            password: bcrypt.hashSync("ZEDchuva123", salt),
-            admin: true,
-        };
-        try {
-            const isUserAlreadyExist = await User.findAll({ raw: true, where: { email: newUser.email } });
-            if (isUserAlreadyExist.length === 0) {
-                await User.create(newUser);
-                res.send(`${newUser.name} criado com sucesso`);
-            }
-            throw "user already exist";
-        } catch (err) {
-            if (err === "user already exist") {
-                return res.send("E-mail já em uso");
-            }
-            res.send("error");
-        }
+        // const newUser = {
+        //     name: "Guilherme",
+        //     email: "admin@teste.com",
+        //     password: bcrypt.hashSync("ZEDchuva123", salt),
+        //     admin: true,
+        // };
+        // try {
+        //     const isUserAlreadyExist = await User.findAll({ raw: true, where: { email: newUser.email } });
+        //     if (isUserAlreadyExist.length === 0) {
+        //         await User.create(newUser);
+        //         res.send(`${newUser.name} criado com sucesso`);
+        //     }
+        //     throw "user already exist";
+        // } catch (err) {
+        //     if (err === "user already exist") {
+        //         return res.send("E-mail já em uso");
+        //     }
+        //     res.send("error");
+        // }
+        console.log(req, body);
     },
     postLogin: async (req, res) => {
         const { email, password } = req.body;
