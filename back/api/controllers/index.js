@@ -1,4 +1,5 @@
-const UserController = require("./User");
-const MovieController = require("./Movie");
+const UserController = require('./User');
+const MovieController = require('./Movie');
+const authenticate = require('./Authenticator');
 
-module.exports = { UserController, MovieController };
+module.exports = { UserController, MovieController, authenticate };

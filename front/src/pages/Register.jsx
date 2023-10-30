@@ -2,7 +2,7 @@ import { Button, Input, message, Image } from 'antd'
 import { UserOutlined, MailOutlined, KeyOutlined } from '@ant-design/icons'
 import { useForm, Controller } from 'react-hook-form' 
 import { UserContext } from '../context/UserContext';
-import axios from 'axios'
+import api from '../api';
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listOfStreaming } from '../assets/images'
@@ -14,15 +14,18 @@ export default function Register(){
     const [movies, setMovies] = useState([])
     const [providersList, setProvidersList] = useState(listOfStreaming.map(streaming=>{return{...streaming, status:false}}));
 
-    function handleConfirm(data){
+    async function handleConfirm(data){
         const {name, email, password, confirm_password} = data;
         const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         
-        // if(name.trim().length < 3 || name === undefined) return message.warning('Informe um nome');
-        // if(!regex.test(email)) return message.warning('Informe um e-mail válido');
-        // if(password.trim().length < 8 && confirm_password.trim().length < 8) return message.warning('Informe um senha com pelo menos 8 caracteres');
-        // if(password !== confirm_password) return message.warning('Senhas não coicidem');
-            
+        if(name.trim().length < 3 || name === undefined) return message.warning('Informe um nome');
+        if(!regex.test(email)) return message.warning('Informe um e-mail válido');
+        if(password.trim().length < 8 && confirm_password.trim().length < 8) return message.warning('Informe um senha com pelo menos 8 caracteres');
+        if(password !== confirm_password) return message.warning('Senhas não coicidem');
+        
+        const res = await api.get(`user?email=${email}`);
+        if(res.status == 226)return message.error('E-mail já em uso')  
+        
         setPhase(pv=>pv+1)
     }
 
@@ -67,7 +70,7 @@ export default function Register(){
     useEffect(()=>{
         (async()=>{
             try{
-                const {data} = await axios.get('/api/movie/register');
+                const {data} = await api.get('movie/register');
                 const movieList = data.map(movie=>{return {...movie, status:false}})
                 setMovies(movieList);
             }catch(err){

@@ -1,8 +1,8 @@
-const Movie = require("../modules/Movie");
-const Streaming = require("../modules/Streaming");
-const Genre = require("../modules/Genre");
-const path = require("path");
-const fs = require("fs");
+const Movie = require('../modules/Movie');
+const Streaming = require('../modules/Streaming');
+const Genre = require('../modules/Genre');
+const path = require('path');
+const fs = require('fs');
 
 const MovieController = {
     get: async (req, res) => {
@@ -11,27 +11,27 @@ const MovieController = {
             const movie = await Movie.findByPk(id, {
                 // raw: true,
                 attributes: {
-                    exclude: ["json"],
+                    exclude: ['json'],
                 },
                 include: [
                     {
                         model: Streaming,
                         required: false,
-                        through: [""],
-                        attributes: { exclude: ["json"] },
+                        through: [''],
+                        attributes: { exclude: ['json'] },
                     },
                     {
                         model: Genre,
                         required: false,
                         // attributes: ["name"],
-                        through: [""],
-                        attributes: { exclude: ["json"] },
+                        through: [''],
+                        attributes: { exclude: ['json'] },
                     },
                 ],
             });
 
             if (movie === null) {
-                throw "Filme não encontrado";
+                throw 'Filme não encontrado';
             }
             res.send(movie);
         } catch (error) {
@@ -43,12 +43,12 @@ const MovieController = {
 
         try {
             const movies = await Movie.findAll({
-                attributes: { exclude: ["json"] },
+                attributes: { exclude: ['json'] },
                 include: [
                     {
                         model: Genre,
                         required: true,
-                        through: "movieGenre",
+                        through: 'movieGenre',
 
                         where: {
                             id: idGenre,
@@ -61,12 +61,12 @@ const MovieController = {
                     //     as: "otherGenres",
                     // },
                 ],
-                order: [["score_popularity", "DESC"]],
+                order: [['score_popularity', 'DESC']],
                 limit: 20,
             });
 
             if (movies === null) {
-                throw "Filmes não encontrados";
+                throw 'Filmes não encontrados';
             }
             res.send(movies);
         } catch (error) {
@@ -78,9 +78,8 @@ const MovieController = {
             const movies = await Movie.findAll({
                 limit: 78,
                 raw: true,
-                order: [["score_popularity", "desc"]],
+                order: [['score_popularity', 'desc']],
             });
-            console.log(movies);
             res.send(movies);
         } catch (error) {
             res.send(error);

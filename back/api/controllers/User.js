@@ -1,52 +1,76 @@
-const { User } = require("../modules/index");
-const bcrypt = require("bcryptjs");
+const { User } = require('../modules/index');
+const bcrypt = require('bcryptjs');
+const JWT = require('jsonwebtoken');
 const salt = 10;
 
 const UserController = {
     post: async (req, res) => {
+        console.log(req.body);
+        res.send(req.body);
         // const newUser = {
-        //     name: "Guilherme",
-        //     email: "admin@teste.com",
-        //     password: bcrypt.hashSync("ZEDchuva123", salt),
+        //     name: 'Guilherme',
+        //     email: 'admin@teste.com',
+        //     password: bcrypt.hashSync('ZEDchuva123', salt),
         //     admin: true,
         // };
         // try {
-        //     const isUserAlreadyExist = await User.findAll({ raw: true, where: { email: newUser.email } });
-        //     if (isUserAlreadyExist.length === 0) {
+        //     const isUserAlreadyExist = await User.findOne({ raw: true, where: { email: newUser.email } });
+        //     console.log(isUserAlreadyExist);
+        //     if (!isUserAlreadyExist) {
         //         await User.create(newUser);
         //         res.send(`${newUser.name} criado com sucesso`);
         //     }
-        //     throw "user already exist";
+        //     throw 'user already exist';
         // } catch (err) {
-        //     if (err === "user already exist") {
-        //         return res.send("E-mail já em uso");
+        //     if (err === 'user already exist') {
+        //         return res.send('E-mail já em uso');
         //     }
-        //     res.send("error");
+        //     res.send('error');
         // }
-        console.log(req, body);
     },
     postLogin: async (req, res) => {
         const { email, password } = req.body;
-        console.log(email, password);
         try {
             const user = await User.findOne({
                 raw: true,
                 where: { email },
             });
-            if (user) {
-                if (bcrypt.compareSync(password, user.password)) {
-                    const { password, ...rest } = user;
-                    return res.status(200).send(JSON.stringify(rest));
-                }
+            if (!user) {
+                throw 'e-mail or password incorrect';
             }
-            throw 403;
+            if (bcrypt.compareSync(password, user.password)) {
+                const { password, ...userInformation } = user;
+                const secret = process.env.JWT_TOKEN_SECRET;
+                const jwt = JWT.sign({ id: user.id }, secret, { expiresIn: 120 });
+                res.header('Access-Control-Expose-Headers', 'Authorization-Token');
+                res.header('Authorization-Token', JSON.stringify(jwt));
+                return res.status(200).send(userInformation);
+            }
+            throw 401;
         } catch (error) {
             console.log(error);
-            return res.status(403).send("not found");
+            return res.status(401).send('access denied');
         }
-
-        // res.send(user);
-        // console.log(User);
+    },
+    get: async (req, res) => {
+        const { id } = req.params;
+        const user = await User.findByPk(id, { raw: true });
+        if (user) {
+            const { password, ...userInformation } = user;
+            return res.status(200).send(userInformation);
+        }
+        return res.status(400).send("user doesn't exist");
+    },
+    getByEmail: async (req, res) => {
+        const { email } = req.query;
+        const user = await User.findOne({ where: { email }, raw: true });
+        if (user) {
+            return res.status(226).send('e-mail already in use');
+        }
+        res.status(200).send(true);
+    },
+    test: (req, res) => {
+        res.send({ ok: true });
     },
 };
 

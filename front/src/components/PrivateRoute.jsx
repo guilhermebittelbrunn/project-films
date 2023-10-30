@@ -3,8 +3,8 @@ import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 
 export default function PriveteRouter({children}){
-    const {user} = useContext(UserContext);
+    const { authenticated } = useContext(UserContext);
     
-    return user ?  children : <Navigate to={'/'}/>
+    return authenticated ?  children : <Navigate to={'/'}/>
     
 } 
