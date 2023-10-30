@@ -39,25 +39,25 @@ const UserController = {
                 throw 'e-mail or password incorrect';
             }
             if (bcrypt.compareSync(password, user.password)) {
-                const { password, ...userInformation } = user;
+                const { password, ...userData } = user;
                 const secret = process.env.JWT_TOKEN_SECRET;
                 const jwt = JWT.sign({ id: user.id }, secret, { expiresIn: 120 });
-                res.header('Access-Control-Expose-Headers', 'Authorization-Token');
-                res.header('Authorization-Token', JSON.stringify(jwt));
-                return res.status(200).send(userInformation);
+                // res.header('Access-Control-Expose-Headers', 'Authorization-Token');
+                // res.header('Authorization-Token', JSON.stringify(jwt));
+                return res.status(200).send({ userData: userData, token: JSON.stringify(jwt) });
             }
-            throw 401;
+            throw 400;
         } catch (error) {
             console.log(error);
-            return res.status(401).send('access denied');
+            return res.status(400).send('access denied');
         }
     },
     get: async (req, res) => {
         const { id } = req.params;
         const user = await User.findByPk(id, { raw: true });
         if (user) {
-            const { password, ...userInformation } = user;
-            return res.status(200).send(userInformation);
+            const { password, ...userData } = user;
+            return res.status(200).send(userData);
         }
         return res.status(400).send("user doesn't exist");
     },
