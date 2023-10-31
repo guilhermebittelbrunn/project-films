@@ -1,18 +1,20 @@
-import { Button, Input, message, Image } from 'antd'
+import { Button, Input, message, Image, Spin } from 'antd'
 import { UserOutlined, MailOutlined, KeyOutlined } from '@ant-design/icons'
 import { useForm, Controller } from 'react-hook-form' 
 import { UserContext } from '../context/UserContext';
-import api from '../api';
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listOfStreaming } from '../assets/images'
 import { Link } from 'react-router-dom'
+import api from '../api';
 
 export default function Register(){
     const { control, handleSubmit, register } = useForm();
     const [phase, setPhase] = useState(1);
-    const [movies, setMovies] = useState([])
+    const [movies, setMovies] = useState([]);
     const [providersList, setProvidersList] = useState(listOfStreaming.map(streaming=>{return{...streaming, status:false}}));
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate()
 
     async function handleConfirm(data){
         const {name, email, password, confirm_password} = data;
@@ -59,12 +61,28 @@ export default function Register(){
         setMovies(x);
     }
 
-    function handleSubmitForm(data){
-        // const favoriteProviders = providersList.filter(provider=>provider.status);
-        // const favoriteMovies = movies.filter(movie=>movie.status);
-        // const userData = {...data, streamings: favoriteProviders, movies: favoriteMovies}
-        // console.log(userData);
-        setPhase(pv=>pv+1);
+    async function handleSubmitForm(data){
+        const favoriteProviders = providersList.filter(provider=>provider.status);
+        const favoriteMovies = movies.filter(movie=>movie.status);
+        const userData = {...data, streamings: favoriteProviders, movies: favoriteMovies}
+        if(favoriteMovies.length < 5){
+            return message.warning('Selecione pelo menos 5 filmes para criar a conta');
+        }
+        try{
+            setIsLoading(true);
+            const res = await api.post('/user/create', userData);
+            if(res.status === 201){
+                message.success(`Usuário ${res.data.userName} criado com sucesso!`);
+                setTimeout(()=>{
+                    navigate('/login');
+                }, 3000)
+            }
+        }catch(err){
+            console.log(err);
+        }finally{
+            setIsLoading(false);
+        }
+        
     }
 
     useEffect(()=>{
@@ -79,10 +97,6 @@ export default function Register(){
             }
         })()
     },[]);
-
-    useEffect(()=>{
-        console.log(phase)
-    },[phase]);
 
     return(
         <>
@@ -173,26 +187,67 @@ export default function Register(){
 
                             <div id='btns' className='flex font-semibold w-full justify-between px-4 gap-2 text-lg mt-2 max-sm:flex-col max-sm:my-6 max-sm:items-center'>
                                 <button className='py-2 px-4 rounded-sm border-[1px] border-primary w-[180px] max-sm:text-base max-sm:py-1 max-sm:px-2 max-sm:w-4/5 max-sm:order-2 lg:opacity-70 hover:opacity-100' onClick={()=>{setPhase(pv=>pv-1)}}>Anterior</button>
-                                <button type='submit' className='py-2 px-4 border-[1px] border-primary w-[180px] max-sm:text-base max-sm:py-1 max-sm:px-2  max-sm:w-4/5 max-sm:order-1 lg:opacity-70 hover:opacity-100'>Criar conta</button>
+                                <button className='py-2 px-4 border-[1px] border-primary w-[180px] max-sm:text-base max-sm:py-1 max-sm:px-2  max-sm:w-4/5 max-sm:order-1 lg:opacity-70 hover:opacity-100' onClick={(e)=>{e.preventDefault();setPhase(pv=>pv+1)}}>Criar conta</button>
                             </div>
                         </div>
                     }
                     {
                         phase === 4 &&
-                        <div className='bg-blue-800 flex flex-col justify-between py-6 items-center w-[400px] h-[500px] absolute top-2/4 left-2/4 transform translate-x-[-50%] translate-y-[-50%]'>
-                            <h2>Confirmar dados</h2>
-                            <div>
-                                <h3>Filmes</h3>
-                                <p>{movies.map(movie=>{
-                                        if(movie.status){
-                                            return <span>{movie.title}</span>
-                                        }
-                                })}
-                                </p>
-                            </div>
-                            <div className='flex justify-around w-full'>
-                                <button>Cancelar</button>
-                                <button>Confirmar</button>
+                        <div className='w-screen h-screen absolute' style={{backgroundColor: 'rgba(27, 27, 27, .7)'}}>
+                            <div className='bg-secondery opacity-100 rounded-sm border-[2px] border-primary flex flex-col justify-between py-4 items-center w-[340px] absolute top-2/4 left-2/4 transform translate-x-[-50%] translate-y-[-50%]'>
+                                {isLoading ?
+                                    <Spin/>
+                                :
+                                <>
+                                    <h2 className='font-semibold text-lg'>Você deseja confirmar seu registro?</h2>
+                                    <div className='w-full px-8 flex flex-col gap-4 py-4'>
+                                        <div>
+                                            <div className='flex justify-between'>
+                                                <h3 className='font-bold'>Número de serviços selecionados</h3>
+                                                <span>{providersList.filter(provider=>provider.status).length}</span>
+                                            </div>
+                                            <details>
+                                                <summary className='cursor-pointer'>Lista de plataformas</summary>
+                                                <ul className='max-h-[90px] overflow-auto' id='movie-section'>
+                                                    {providersList.map((provider, k)=>{
+                                                        if(provider.status){
+                                                            return(
+                                                                <div key={k} className='border-b-2 border-primary'>
+                                                                    <li key={provider.id}>{provider.name}</li>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    })}
+                                                </ul>
+                                            </details>
+                                        </div>
+                                        <div>
+                                            <div className='flex justify-between'>
+                                                <h3 className='font-bold'>Número de filmes selecionados</h3>
+                                                <span>{movies.filter(movie=>movie.status).length}</span>
+                                            </div>
+                                            <details>
+                                                <summary className='cursor-pointer'>Lista de filmes</summary>
+                                                <ul className='max-h-[90px] overflow-auto' id='movie-section'>
+                                                    {movies.map((movie,k)=>{
+                                                        if(movie.status){
+                                                            return(
+                                                                <div key={k} className='border-b-2 border-primary'>
+                                                                    <li key={movie.id}>{movie.title}</li>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    })}
+                                                </ul>
+                                            </details>
+                                        </div>
+                                    </div>
+                                    <div className='flex justify-between w-full px-4 mt-2'>
+                                        <button onClick={()=>{setPhase(phase -1)}} className='w-[120px] bg-backgroundOne border-[2px] border-primary rounded-md px-3 py-1 transition-all opacity-70 hover:opacity-100'>Cancelar</button>
+                                        <button type='submit' className='w-[120px] bg-backgroundOne border-[2px] border-primary rounded-md px-3 py-1 transition-all opacity-70 hover:opacity-100'>Confirmar</button>
+                                    </div>
+                                </>
+                                }
                             </div>
                         </div>
                     }

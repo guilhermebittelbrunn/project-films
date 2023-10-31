@@ -6,7 +6,7 @@ import Router from './Router'
 
 export default function App(){
     return(
-      <>
+      <div className="text-font">
         <BrowserRouter>
           <ConfigProvider locale={pt_BR}>
             <UserProvider>
@@ -14,6 +14,6 @@ export default function App(){
             </UserProvider>
           </ConfigProvider>
         </BrowserRouter>
-      </>
+      </div>
     )
 }
