@@ -13,12 +13,15 @@ const Item = ({ movie }) => (
       return (
         <div
           ref={elementRef}
+          // style={{width:'80px'}}
+          onClick={() => onSelectSlide(movie)}
           className={cx('item', {
             'item--open': isActive,
           })}
+        
         >
-          <img src={movie.image} alt="" />
-          <ShowDetailsButton onClick={() => onSelectSlide(movie)} />
+          <img src={movie.image} alt=""/>
+          {/* <ShowDetailsButton onClick={() => onSelectSlide(movie)} /> */}
           {isActive && <Mark />}
         </div>
       );

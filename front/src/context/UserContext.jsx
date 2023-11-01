@@ -21,7 +21,7 @@ export default function UserProvider({children}){
                 const {userData, token} = res.data;
                 // const token = res.headers['authorization-token'];
                 setTokenAndUserDate(userData, token);
-                return navigate('/teste');
+                return navigate('/');
             } 
             throw res.data
         }catch(err){

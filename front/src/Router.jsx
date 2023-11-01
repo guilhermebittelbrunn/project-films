@@ -6,14 +6,17 @@ import Register from './pages/Register'
 import Home from './pages/Home'
 import PageNotFound from './pages/PageNotFound'
 import Teste from './pages/Teste'
+import Main from './pages/sub-pages/Main'
+import Profile from './pages/sub-pages/Profile'
 
 export default function Router(){
     return(
         <Routes>
-            <Route path='/teste' element={<PriveteRoute><Teste/></PriveteRoute>}/>
             <Route path='/login' element={<CustomRoute><Login/></CustomRoute>}/>
             <Route path='/register' element={<CustomRoute><Register/></CustomRoute>}/>
-            <Route path='/' element={<Home/>}/>  
+            <Route path='/' element={<Home title='Home' subtitle='Explore filmes diversos'><Main/></Home>}/>  
+            <Route path='/teste' element={<Home title='Home' subtitle='Explore filmes diversos'><Teste/></Home>}/>  
+            <Route path='/slider' element={<Profile/>}/>  
             <Route path='*' element={<PageNotFound/>}/>  
         </Routes>
     )

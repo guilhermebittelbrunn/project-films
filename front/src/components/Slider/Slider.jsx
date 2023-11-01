@@ -36,7 +36,7 @@ const Slider = ({ children, activeSlide }) => {
   };
 
   return (
-    <SliderContext.Provider value={contextValue}>
+    <SliderContext.Provider value={contextValue} className="bg-blue-300">
       <SliderWrapper>
         <div
           className={cx('slider', { 'slider--open': currentSlide != null })}

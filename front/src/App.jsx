@@ -8,7 +8,7 @@ export default function App(){
     return(
       <div className="text-font">
         <BrowserRouter>
-          <ConfigProvider locale={pt_BR}>
+          <ConfigProvider locale={pt_BR} theme={{token: {colorPrimary: '#09B54E', colorText: '#FAFAFA'}}} >
             <UserProvider>
               <Router/>
             </UserProvider>
