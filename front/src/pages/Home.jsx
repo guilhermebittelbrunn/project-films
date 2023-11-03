@@ -41,10 +41,10 @@ export default function Home({children, title, subtitle}){
                     user ? 
                     <div className="w-full">
                         <header className="text-center w-full my-10 flex flex-col font-bold gap-3 justify-center items-center">
-                            <h1 className="text-5xl">{title}</h1>
-                            <h2 className="text-3xl">{subtitle}</h2>
+                            <h1 className="text-5xl max-sm:text-3xl">{title}</h1>
+                            <h2 className="text-3xl max-sm:text-xl">{subtitle}</h2>
                         </header>
-                        <div className="min-h-[600px]flex flex-col justify-center items-center">
+                        <div className="min-h-[600px]flex flex-col justify-center items-center"> 
                             {children}
                         </div>
                     </div>

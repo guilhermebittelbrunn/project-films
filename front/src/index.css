@@ -3,22 +3,42 @@
 @tailwind utilities;
 
 
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 300 600;
+    /* src: local('Montserrat Light'), local('Montserrat-Bold'), url('/caminho/para/sua/fonte/montserrat.woff2') format('woff2'); */
+}
+
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
 #movie-section::-webkit-scrollbar {
-    width: 8px;
     /* width of the entire scrollbar */
+    width: 8px;
 }
 
 #movie-section::-webkit-scrollbar-track {
-    background: #171717;
     /* color of the tracking area */
+    background: #171717;
 }
 
 #movie-section::-webkit-scrollbar-thumb {
-    background-color: #09B54E;
-
     /* color of the scroll thumb */
-    border-radius: 20px;
+    background-color: #09B54E;
     /* roundness of the scroll thumb */
-    border: 1px solid #09B54E;
+    border-radius: 20px;
     /* creates padding around scroll thumb */
+    border: 1px solid #09B54E;
 }
+
+
+
+
+
+
+    
+    
+    
+    

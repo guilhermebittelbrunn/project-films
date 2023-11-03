@@ -1,7 +1,7 @@
-const { User, List, Movie, Streaming } = require("../modules/index");
-const bcrypt = require("bcryptjs");
-const JWT = require("jsonwebtoken");
-const { Op } = require("sequelize");
+const { User, List, Movie, Streaming } = require('../modules/index');
+const bcrypt = require('bcryptjs');
+const JWT = require('jsonwebtoken');
+const { Op } = require('sequelize');
 const salt = 10;
 
 const UserController = {
@@ -12,7 +12,7 @@ const UserController = {
         try {
             const crypetedPassword = bcrypt.hashSync(password);
             const newUser = await User.create({ name, email, password: crypetedPassword });
-            const newList = await List.create({ name: "favorites", idUser: newUser.id });
+            const newList = await List.create({ name: 'favorites', idUser: newUser.id });
             const listMovies = await Movie.findAll({
                 where: {
                     id: {
@@ -34,7 +34,7 @@ const UserController = {
                 streaming.setUsers(newUser);
             });
 
-            res.status(201).send({ message: "user created succesfully", userName: newUser.dataValues.name });
+            res.status(201).send({ message: 'user created succesfully', userName: newUser.dataValues.name });
         } catch (err) {
             console.log(err);
             res.send(err);
@@ -69,12 +69,12 @@ const UserController = {
                 where: { email },
             });
             if (!user) {
-                throw "e-mail or password incorrect";
+                throw 'e-mail or password incorrect';
             }
             if (bcrypt.compareSync(password, user.password)) {
                 const { password, ...userData } = user;
                 const secret = process.env.JWT_TOKEN_SECRET;
-                const jwt = JWT.sign({ id: user.id }, secret, { expiresIn: 120 });
+                const jwt = JWT.sign({ id: user.id }, secret, { expiresIn: 600 });
                 // res.header('Access-Control-Expose-Headers', 'Authorization-Token');
                 // res.header('Authorization-Token', JSON.stringify(jwt));
                 return res.status(200).send({ userData: userData, token: JSON.stringify(jwt) });
@@ -82,7 +82,7 @@ const UserController = {
             throw 400;
         } catch (error) {
             console.log(error);
-            return res.status(400).send("access denied");
+            return res.status(400).send('access denied');
         }
     },
     get: async (req, res) => {
@@ -98,7 +98,7 @@ const UserController = {
         const { email } = req.query;
         const user = await User.findOne({ where: { email }, raw: true });
         if (user) {
-            return res.status(226).send("e-mail already in use");
+            return res.status(226).send('e-mail already in use');
         }
         res.status(200).send(true);
     },

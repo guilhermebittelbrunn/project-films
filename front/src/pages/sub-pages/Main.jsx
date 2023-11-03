@@ -1,295 +1,418 @@
-import React from 'react';
-import { Tabs } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Spin, Tabs } from 'antd';
 import Slider from '../../components/Slider'
-import Slide2 from '../../components/Slide2'
-const movies = [
-  {
-    id: 1,
-    image: '/images/slide1.jpg',
-    imageBg: '/images/slide1b.webp',
-    title: '1983',
-    description: 'teste'
-    
-  },
-  {
-    id: 2,
-    image: '/images/slide2.jpg',
-    imageBg: '/images/slide2b.webp',
-    title: 'Russian doll',
-    description: 'teste'
-    
-  }
-  ,
-  {
-    id: 3,
-    image: '/images/slide3.jpg',
-    imageBg: '/images/slide3b.webp',
-    title: 'The rain',
-    description: 'teste'
-  }
-  ,
-  {
-    id: 4,
-    image: '/images/slide4.jpg',
-    imageBg: '/images/slide4b.webp',
-    title: 'Sex education',
-    description: 'teste'
-  }
-  ,
-  {
-    id: 5,
-    image: '/images/slide5.jpg',
-    imageBg: '/images/slide5b.webp',
-    title: 'Elite',
-    description: 'teste'
-  }
-  ,
-  {
-    id: 6,
-    image: '/images/slide6.jpg',
-    imageBg: '/images/slide6b.webp',
-    title: 'Black mirror',
-    description: 'teste'
-  }
-    ,
-  {
-    id: 7,
-    image: '/images/slide3.jpg',
-    imageBg: '/images/slide3b.webp',
-    title: 'The rain',
-    description: 'teste'
-  }
-  ,
-  {
-    id: 8,
-    image: '/images/slide4.jpg',
-    imageBg: '/images/slide4b.webp',
-    title: 'Sex education',
-    description: 'teste'
-  }
-  ,
-  {
-    id: 9,
-    image: '/images/slide5.jpg',
-    imageBg: '/images/slide5b.webp',
-    title: 'Elite',
-    description: 'teste'
-  }
-  ,
-    ,
-  {
-    id: 10,
-    image: '/images/slide3.jpg',
-    imageBg: '/images/slide3b.webp',
-    title: 'The rain',
-    description: 'teste'
-  }
-  ,
-  {
-    id: 11,
-    image: '/images/slide4.jpg',
-    imageBg: '/images/slide4b.webp',
-    title: 'Sex education',
-    description: 'teste'
-  }
-  ,
-  {
-    id: 12,
-    image: '/images/slide5.jpg',
-    imageBg: '/images/slide5b.webp',
-    title: 'Elite',
-    description: 'teste'
-  }
-  ,
-  
-];
+import useFetch from '../../hooks/useFetch';
 
-const items = [
-  {
-    id: 0,
-    title: "Banana",
-    imageUrl: "https://images.agoramedia.com/everydayhealth/gcms/All-About-Bananas-Nutrition-Facts-Health-Benefits-Recipes-and-More-RM-722x406.jpg",
-    calories: 72,
-    duration: 100,
-    tags: ['Yellow','Potassium','Tropical'],
-    ageRestriction: 12,
-  }, 
-  {
-    id: 1, 
-    title: "Mango",
-    imageUrl: "https://i0.wp.com/bioplasticsnews.com/wp-content/uploads/2019/09/bioplastics-mango-kernel.png?resize=1024%2C576&ssl=1",
-    calories: 60,
-    duration: 147,
-    tags: ['Tasty','Colorful','Popular'],
-    ageRestriction: 14,
-  }, 
-  {
-    id: 2, 
-    title: "Apple",
-    imageUrl: "https://ichef.bbci.co.uk/wwfeatures/live/976_549/images/live/p0/7v/2w/p07v2wjn.jpg",
-    calories: 52,
-    duration: 89,
-    tags: ['Red','Popular','Also a brand'],
-    ageRestriction: 16,
-  }, 
-  {
-    id: 3, 
-    title: "Kiwi",
-    imageUrl: "https://ativosaude.akamaized.net/wp-content/uploads/2018/06/23103605/kiwi-fruta.jpg",
-    calories: 61,
-    duration: 124,
-    tags: ['Green','Different','Exotic'],
-    ageRestriction: 10,
-  },
-  {
-    id: 4, 
-    title: "Pineapple",
-    imageUrl: "https://s.yimg.com/ny/api/res/1.2/JFq5c46xXXBOoW9zqEnhiw--~A/YXBwaWQ9aGlnaGxhbmRlcjtzbT0xO3c9ODAw/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2019-10/5b495350-e613-11e9-bfdf-1e399de02304",
-    calories: 50,
-    duration: 111,
-    tags: ['Spiky','Leaf','Tropical'],
-    ageRestriction: 18,
-  },
-  {
-    id: 5, 
-    title: "Pear",
-    imageUrl: "https://englishlive.ef.com/pt-br/blog/wp-content/uploads/sites/16/2013/12/pear-pera-em-ingles.jpg",
-    calories: 57,
-    duration: 122,
-    tags: ['Yellowish','Greenish','Sweet'],
-    ageRestriction: 12,
-  },
-  {
-    id: 6, 
-    title: "Raspberry",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Raspberries05.jpg/1200px-Raspberries05.jpg",
-    calories: 53,
-    duration: 95,
-    tags: ['Red','Edible','Berry'],
-    ageRestriction: 14,
-  },
-  {
-    id: 7, 
-    title: "Strawberry",
-    imageUrl: "https://mk0nationaltodayijln.kinstacdn.com/wp-content/uploads/2019/02/national-strawberry-month-640x514.jpg",
-    calories: 33,
-    duration: 104,
-    tags: ['Tasty','Berry','Red'],
-    ageRestriction: 18,
-  },
-  {
-    id: 8, 
-    title: "Coconut",
-    imageUrl: "https://images.agoramedia.com/everydayhealth/gcms/all-about-coconut-722x406.jpg",
-    calories: 283,
-    duration: 94,
-    tags: ['Palm trees','Tropical','Water'],
-    ageRestriction: 12,
-  },
-  {
-    id: 9, 
-    title: "Melon",
-    imageUrl: "https://media.gettyimages.com/photos/fresh-melon-picture-id480915274?b=1&k=6&m=480915274&s=612x612&w=0&h=-5OT2p1CIbdJYNdZrF-UMu7z7vrvvSEuTeZ_PTJzZx8=",
-    calories: 34,
-    duration: 73,
-    tags: ['Cantaloupe','Vitamin A','Sweet'],
-    ageRestriction: 10,
-  },
-  {
-    id: 10, 
-    title: "Watermelon",
-    imageUrl: "https://snaped.fns.usda.gov/sites/default/files/styles/crop_ratio_7_5/public/seasonal-produce/2018-05/watermelon.jpg?itok=6EdNOdUo",
-    calories: 30,
-    duration: 126,
-    tags: ['Hydration','Green','Red'],
-    ageRestriction: 18,
-  },
-  {
-    id: 11, 
-    title: "Orange",
-    imageUrl: "https://xzdl43v0mdf2m45tz2aj7kkv35-wpengine.netdna-ssl.com/wp-content/uploads/2010/10/orange-780x400.jpg",
-    calories: 47,
-    duration: 107,
-    tags: ['Vitamin C','Orange','Juice'],
-    ageRestriction: 14,
-  },
-]
-
-
-function Child1(){
-    return(
-        <div className='flex flex-col min-h-[600px] items-center w-11/12 m-auto mt-10 bg-red-400'>
-            <div>
-                <h3 className='text-font text-xl'>Label</h3>
-                <Slider>
-                    {movies.map(movie => (<Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>))}
-                </Slider>
-            </div>
-            <div>
-                <h3 className='text-font text-xl'>Label</h3>
-                <Slider>
-                    {movies.map(movie => (<Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>))}
-                </Slider>
-            </div>
-            <div>
-                <h3 className='text-font text-xl'>Label</h3>
-                <Slider>
-                    {movies.map(movie => (<Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>))}
-                </Slider>
-            </div>
-            <div>
-                <h3 className='text-font text-xl'>Label</h3>
-                <Slider>
-                    {movies.map(movie => (<Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>))}
-                </Slider>
-            </div>
-        </div>
-    )
+const obj = {
+  action: [
+      {
+      id: 1,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 2,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 3,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 4,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 5,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 6,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 7,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 8,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 9,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 10,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 11,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+  ],
+  fantasy: [
+      {
+      id: 1,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 2,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 3,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 4,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 5,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 6,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 7,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 8,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 9,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 10,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 11,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+  ],
+  scyfi:  [
+      {
+      id: 1,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 2,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 3,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 4,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 5,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 6,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 7,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 8,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 9,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 10,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 11,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+  ],
+  sport:  [
+      {
+      id: 1,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 2,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 3,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 4,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 5,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 6,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 7,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 8,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 9,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 10,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+    {
+      id: 11,
+      image: 'https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg',
+      imageBg: '/images/slide1b.webp',
+      title: '1983',
+      description: 'teste'
+    },
+  ],
 }
+function Content({url}){
+  const [movieList, setMovieList] = useState([]);
+  const {data, loading, error} = useFetch(url);
 
-function Child2(){
+  useEffect(() => {
+    if(loading){
+      return;
+    }
+    if(error){
+      return;
+    }
+    const htmlElementCollection = [];
+    for(let key in obj){
+      if(obj.hasOwnProperty(key)){
+        htmlElementCollection.push(
+          <div className='mt-[-28px]'>
+            <h3 className='text-primary font-semibold text-xl absolute left-2 uppercase font max-sm:text-lg'>{key}</h3>
+            <Slider>
+                {obj[key].map(movie=>{
+                  return <Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>
+                })} 
+            </Slider>
+          </div>  
+        )
+      }
+    }
+    setMovieList(htmlElementCollection);
+  }, [data]);
+
+
   return(
-    <div className='flex flex-col min-h-[600px] items-center w-11/12 m-auto mt-10 bg-red-400'>
-      <Slide2 itemsPerSlide="6" payload={items}/>
-    </div>
+    <>
+      <div className='flex flex-col min-h-[600px] items-center w-12/12 mt-10' key={2}>
+        {error ?
+          <div className='text-center text-red-500 text-xl font-bold mt-10'>
+            {error}
+          </div>
+        :
+          loading ? 
+          <div className='w-full flex justify-center items-center'>
+            <Spin size='large'/>
+          </div>
+          :
+          movieList
+          }
+      </div> 
+    </>
   )
 }
 
-function Label({title}){
-    return(
-        <h3 className='text-xl font-semibold mx-8 max-sm:mx-2 max-sm:text-sm'>{title}</h3>
-    )
-}
-
-const onChange = (key) => {
-  console.log(key);
-};
 const tabItems = [
   {
     key: '1',
-    label: <Label title='Descobertas'/>,
-    children: <Child1/>
+    label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Descobertas</h3>,
+    children: <Content url={'/movie/5'}/>
   },
   {
     key: '2',
-    label: <Label title='Recomendações'/>,
-    children: <Child2/>
+    label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Recomendações</h3>,
+    children: <Content url={'/movie/6'}/>
   },
 ];
 
+
+
 export default function Main(){
+  
+
+    function handleTabChange(e){
+      if(e === '1'){
+        console.log('Tab change 1')
+        setUrl({path:'/movie/5', code: 5});
+      }
+      else{
+        console.log('Tab change 2')
+        setUrl({path:'/movie/6', code: 6});
+      }
+    }
+
+
     return (
         <>
-            <Tabs 
-                className='w-full '
-                tabBarStyle={{width:'100%', margin: 'auto', backgroundColor: 'blue'}}
-                centered defaultActiveKey="1" 
-                items={tabItems} 
-                onChange={onChange} size='large'
-                indicatorSize={160}
-             />
+        <Tabs 
+          className='w-full'
+          tabBarStyle={{width:'100%', margin: 'auto'}}
+          centered defaultActiveKey="2" 
+          items={tabItems} 
+          size='large'
+          onChange={handleTabChange}
+          indicatorSize={160}
+        />
         </>
     )
 }
-
 
