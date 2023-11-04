@@ -88,7 +88,7 @@ export default function Register(){
     useEffect(()=>{
         (async()=>{
             try{
-                const {data} = await api.get('movie/register');
+                const {data} = await api.get('/movie?limit=78');
                 const movieList = data.map(movie=>{return {...movie, status:false}})
                 setMovies(movieList);
             }catch(err){

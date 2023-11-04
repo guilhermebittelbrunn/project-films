@@ -20,7 +20,9 @@ export default function Home({children, title, subtitle}){
                         <>
                             <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">Home</li>
                             <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">Listas</li>
-                            <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">Buscar</li>
+                            <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">
+                                <Link to='/search'>Buscar</Link>
+                            </li>
                             <UserOutlined className="font-semibold transition-all hover:cursor-pointer hover:text-primary"/>
                         </>
                         :

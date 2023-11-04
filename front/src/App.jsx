@@ -8,7 +8,7 @@ export default function App(){
     return(
       <div className="text-font">
         <BrowserRouter>
-          <ConfigProvider locale={pt_BR} theme={{token: {colorPrimary: '#09B54E', colorText: '#FAFAFA'}}} >
+          <ConfigProvider locale={pt_BR} theme={{components:{Select: {selectorBg: '#171717', optionSelectedBg: '#09B54E'}},token: {colorPrimary: '#09B54E', colorText: '#FAFAFA',}}}>
             <UserProvider>
               <Router/>
             </UserProvider>

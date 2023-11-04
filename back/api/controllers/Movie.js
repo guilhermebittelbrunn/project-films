@@ -90,9 +90,11 @@ const MovieController = {
         }
     },
     getMostPopular: async (req, res) => {
+        const { limit } = req.query;
+
         try {
             const movies = await Movie.findAll({
-                limit: 78,
+                limit: limit || 70,
                 raw: true,
                 order: [["score_popularity", "desc"]],
             });
