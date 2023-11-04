@@ -326,21 +326,26 @@ function Content({url}){
   const {data, loading, error} = useFetch(url);
 
   useEffect(() => {
-    if(loading){
-      return;
-    }
-    if(error){
+    if(loading || error || !data){
       return;
     }
     const htmlElementCollection = [];
-    for(let key in obj){
-      if(obj.hasOwnProperty(key)){
+    for(let key in data){
+      // eslint-disable-next-line no-prototype-builtins
+      if(data.hasOwnProperty(key) && data[key].length > 6){
         htmlElementCollection.push(
           <div className='mt-[-28px]'>
             <h3 className='text-primary font-semibold text-xl absolute left-2 uppercase font max-sm:text-lg'>{key}</h3>
-            <Slider>
-                {obj[key].map(movie=>{
-                  return <Slider.Item movie={movie} key={movie.id}>item1</Slider.Item>
+            <Slider key={key}>
+                {data[key].map(movie=>{
+                  const movieItem = {
+                    id: movie.id,
+                    image: `https://image.tmdb.org/t/p/w200${movie.poster_path}`,
+                    imageBg: `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`,
+                    title: movie.title,
+                    description: movie.sinopse,
+                  }
+                  return <Slider.Item movie={movieItem} key={key + movie.id}>item1</Slider.Item>
                 })} 
             </Slider>
           </div>  
@@ -371,34 +376,32 @@ function Content({url}){
   )
 }
 
-const tabItems = [
-  {
-    key: '1',
-    label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Descobertas</h3>,
-    children: <Content url={'/movie/5'}/>
-  },
-  {
-    key: '2',
-    label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Recomendações</h3>,
-    children: <Content url={'/movie/6'}/>
-  },
-];
-
 
 
 export default function Main(){
+  const [url,setUrl] = useState('/movie/genres')
   
+  const tabItems = [
+    {
+      key: '1',
+      label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Descobertas</h3>,
+      children: <Content url={url}/>
+    },
+    {
+      key: '2',
+      label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Recomendações</h3>,
+      children: <Content url={url}/>
+    },
+  ];
 
-    function handleTabChange(e){
+  function handleTabChange(e){
       if(e === '1'){
-        console.log('Tab change 1')
-        setUrl({path:'/movie/5', code: 5});
+          setUrl('/movie/genres');
       }
       else{
-        console.log('Tab change 2')
-        setUrl({path:'/movie/6', code: 6});
+        setUrl('/movie/genres');
       }
-    }
+  }
 
 
     return (
@@ -406,7 +409,7 @@ export default function Main(){
         <Tabs 
           className='w-full'
           tabBarStyle={{width:'100%', margin: 'auto'}}
-          centered defaultActiveKey="2" 
+          centered defaultActiveKey="1" 
           items={tabItems} 
           size='large'
           onChange={handleTabChange}

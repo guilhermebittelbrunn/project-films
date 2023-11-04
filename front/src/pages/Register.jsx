@@ -194,7 +194,7 @@ export default function Register(){
                     {
                         phase === 4 &&
                         <div className='w-screen h-screen absolute' style={{backgroundColor: 'rgba(27, 27, 27, .7)'}}>
-                            <div className='bg-secondery opacity-100 rounded-sm border-[2px] border-primary flex flex-col justify-between py-4 items-center w-[340px] absolute top-2/4 left-2/4 transform translate-x-[-50%] translate-y-[-50%]'>
+                            <div className='bg-secondery opacity-100 rounded-sm border-[2px] border-primary flex flex-col justify-between py-4 items-center w-[380px] absolute top-2/4 left-2/4 transform translate-x-[-50%] translate-y-[-50%]'>
                                 {isLoading ?
                                     <Spin/>
                                 :

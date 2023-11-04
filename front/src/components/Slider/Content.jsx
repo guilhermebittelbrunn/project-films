@@ -3,12 +3,12 @@ import IconCross from './Icons/IconCross';
 import './Content.scss';
 
 const Content = ({ movie, onClose }) => (
-  <div className="content">
+  <div className="content" key={movie.id + Math.random(0, 100)}>
     <div className="content__background">
       <div className="content__background__shadow" />
       <div
         className="content__background__image"
-        style={{ 'background-image': `url(${movie.imageBg})` }}
+        style={{ 'backgroundImage': `url(${movie.imageBg})` }}
       />
     </div>
     <div className="content__area">
