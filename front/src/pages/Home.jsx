@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import {UserContext} from '../context/UserContext'
-import { UserOutlined, GithubOutlined, LinkedinFilled, MailOutlined } from '@ant-design/icons'
+import { UserOutlined, GithubOutlined, LinkedinFilled, MailOutlined, MenuOutlined } from '@ant-design/icons'
 
 
 
@@ -42,6 +42,7 @@ export default function Home({children, title, subtitle}){
                         </>
                     }
                 </ul>
+                <MenuOutlined className="sm:hidden"/>
             </nav>
 
             <main className="flex w-full  justify-center items-center">

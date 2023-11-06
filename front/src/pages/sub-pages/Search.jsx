@@ -10,15 +10,14 @@ export default function SearchSection(){
     const [genre, setGenre] = useState('');
     const [loading, setLoading] = useState(true);
 
-
-    function handleChange(e){
-        setTItle(e.target.value);
+    function handleMovieClick(id){
+        console.log(id);
     }
 
     useEffect(()=>{
         (async()=>{
             try{
-                const moviesApi = await api.get('/movie?limit=200');
+                const moviesApi = await api.get('/movie?limit=133');
                 const genresApi = await api.get('/genres');
 
                 const genreSelectOptions = genresApi.data.map(genre=>{
@@ -36,18 +35,12 @@ export default function SearchSection(){
         })();
     },[])
 
- 
-    
-    useEffect(()=>{
-        console.log(genre);
-    },[genre])
     
     useEffect(()=>{
         (async()=>{
             try {
-                // console.log(genre)
-                const movies = await api.get(`/movie?limit=200&title=${title.trim()}&genres=[${genre}]`);
-                console.log(`/movie?limit=200&title=${title.trim()}&genres[${genre}]`)
+                const movies = await api.get(`/movie?limit=&title=${title.trim()}&genres=[${genre}]`);
+                console.log(`/movie?limit=133&title=${title.trim()}&genres[${genre}]`)
                 setMovies(movies.data);
             } catch (error) {
                 console.log(error);
@@ -80,7 +73,7 @@ export default function SearchSection(){
                     <Input 
                         type='text' 
                         value={title} 
-                        onChange={handleChange} 
+                        onChange={(e)=>{setTItle(e.target.value);}} 
                         placeholder='Título' 
                         size='large'
                         className='bg-secondery w-[240px] max-sm:w-[200px]'
@@ -89,13 +82,17 @@ export default function SearchSection(){
                 </div>
             </div>
             <div>
-                <div id='movie-section' className='flex flex-wrap justify-center gap-2 w-full overflow-auto h-[600px]'>
+                <div id='movie-section' className='flex flex-wrap justify-center gap-2 w-full overflow-auto h-[800px]'>
                     {movies.length > 0 ?
                         movies.map((movie, key)=>{
                             return(
-                                <div key={key} className={`w-[155px] max-h-[320px] max-sm:w-[100px] border-2 ${movie.status ? 'border-primary' : 'border-gray-700'}`} onClick={()=>{handleMovieClick(movie.id)}}>
-                                    <img src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} className='w-[160px] h-[220px] bg-posternull max-sm:w-[100px] max-sm:h-[130px]' style={{backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}/>
-                                    <p className='text-sm text-font font-semibold text-center py-1 bg-red-300 mt-1 max-sm:text-xs'>{movie.title}</p>
+                                <div key={key} className={`w-[155px] max-h-[320px] max-sm:w-[100px] transition-colors border-gray-700 border-2 hover:cursor-pointer hover:border-primary`} onClick={()=>{handleMovieClick(movie.id)}}>
+                                    <img 
+                                        src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} 
+                                        className='w-[160px] h-[220px] bg-posternull max-sm:w-[100px] max-sm:h-[130px]' 
+                                        style={{backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}
+                                    />
+                                    <p className='text-sm text-font font-semibold text-center py-1 mt-1 max-sm:text-xs'>{movie.title}</p>
                                 </div>
                             )
                         })

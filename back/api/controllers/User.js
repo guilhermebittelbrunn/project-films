@@ -68,11 +68,12 @@ const UserController = {
                 where: { email },
                 include: {
                     model: Streaming,
-                    required: true,
+                    required: false,
                     // through: [''],
                     attributes: { exclude: ['json'] },
                 },
             });
+            console.log(user);
             if (!user) {
                 throw 'e-mail or password incorrect';
             }

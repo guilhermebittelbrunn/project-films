@@ -75,7 +75,7 @@ export default function Register(){
                 message.success(`Usuário ${res.data.userName} criado com sucesso!`);
                 setTimeout(()=>{
                     navigate('/login');
-                }, 3000)
+                }, 1200)
             }
         }catch(err){
             console.log(err);
