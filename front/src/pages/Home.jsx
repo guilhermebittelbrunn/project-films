@@ -18,12 +18,18 @@ export default function Home({children, title, subtitle}){
                 <ul className="flex gap-4 justify-center items-center">
                     {user ?
                         <>
-                            <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">Home</li>
+                            <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">
+                                <Link to='/'>Home</Link>
+                            </li>
                             <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">Listas</li>
                             <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">
                                 <Link to='/search'>Buscar</Link>
                             </li>
-                            <UserOutlined className="font-semibold transition-all hover:cursor-pointer hover:text-primary"/>
+                            <li>
+                                <Link to='/profile'>
+                                    <UserOutlined className="font-semibold transition-all hover:cursor-pointer hover:text-primary"/>
+                                </Link>
+                            </li>
                         </>
                         :
                         <>

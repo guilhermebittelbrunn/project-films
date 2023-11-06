@@ -5,10 +5,9 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Home from './pages/Home'
 import PageNotFound from './pages/PageNotFound'
-import Teste from './pages/Teste'
 import Main from './pages/sub-pages/Main'
-import Profile from './pages/sub-pages/Profile'
 import Search from './pages/sub-pages/Search'
+import Profile from './pages/sub-pages/Profile'
 
 export default function Router(){
     return(
@@ -17,8 +16,7 @@ export default function Router(){
             <Route path='/register' element={<CustomRoute><Register/></CustomRoute>}/>
             <Route path='/' element={<Home title='Home' subtitle='Explore filmes diversos'><Main/></Home>}/>  
             <Route path='/search' element={<PriveteRoute><Home title='Buscar' subtitle='Busque pelos seus filmes favoritos'><Search/></Home></PriveteRoute>}/>  
-            <Route path='/teste' element={<Home title='Home' subtitle='Explore filmes diversos'><Teste/></Home>}/>  
-            <Route path='/slider' element={<Profile/>}/>  
+            <Route path='/profile' element={<PriveteRoute><Home title='Perfil' subtitle='Informações básicas'><Profile/></Home></PriveteRoute>}/>  
             <Route path='*' element={<PageNotFound/>}/>  
         </Routes>
     )

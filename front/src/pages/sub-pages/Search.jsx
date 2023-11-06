@@ -1,114 +1,111 @@
-import {useForm, Controller} from 'react-hook-form'
 import { useState, useEffect } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { Select } from 'antd';
+import { Select, Input, Spin } from 'antd';
+import api from '../../api';
 
 export default function SearchSection(){
-    const {handleSubmit, control} = useForm();
     const [title, setTItle] = useState('');
-    const {data, error, loading} = useFetch('/movie?limit=200')
+    const [movies, setMovies] = useState([]);
+    const [genres, setGenres] = useState([]);
+    const [genre, setGenre] = useState('');
+    const [loading, setLoading] = useState(true);
 
-    const onChange = (value) => {
-        console.log(`selected ${value}`);
-    };
-    const onSearch = (value) => {
-        console.log('search:', value);
-    };
-
-    // Filter `option.label` match the user type `input`
-    const filterOption = (input, option) =>{
-        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-    }
 
     function handleChange(e){
         setTItle(e.target.value);
     }
 
+    useEffect(()=>{
+        (async()=>{
+            try{
+                const moviesApi = await api.get('/movie?limit=200');
+                const genresApi = await api.get('/genres');
+
+                const genreSelectOptions = genresApi.data.map(genre=>{
+                        return {value: genre.id, label: genre.name}
+                });
+
+                setMovies(moviesApi.data);
+                setGenres([{value: '', label: 'Todos os gêneros'}, ...genreSelectOptions]);
+            }catch(error){
+                console.log(error);
+                return;
+            }finally{
+                setLoading(false);
+            }
+        })();
+    },[])
+
+ 
+    
+    useEffect(()=>{
+        console.log(genre);
+    },[genre])
+    
+    useEffect(()=>{
+        (async()=>{
+            try {
+                // console.log(genre)
+                const movies = await api.get(`/movie?limit=200&title=${title.trim()}&genres=[${genre}]`);
+                console.log(`/movie?limit=200&title=${title.trim()}&genres[${genre}]`)
+                setMovies(movies.data);
+            } catch (error) {
+                console.log(error);
+            }
+        })();
+    },[title, genre])
+
+    if(loading){
+        return (
+            <div className='w-screen h-screen flex justify-center items-center'>
+                <Spin />
+            </div>
+        )
+    }
 
     return(
         <>
-            <form className='flex w-full justify-center items-center my-2 gap-4'>
-                <Select
-                    showSearch
-                    placeholder="Select a person"
-                    optionFilterProp="children"
-                    onChange={onChange}
-                    onSearch={onSearch}
-                    filterOption={filterOption}
-                    size='middle'
-                    className='w-[240px]'
-                    dropdownStyle={{backgroundColor: 'black', color: 'red'}}
-                    options={[
-                    {
-                        value: 'jack',
-                        label: 'Jack',
-                    },
-                    {
-                        value: 'lucy',
-                        label: 'Lucy',
-                    },
-                    {
-                        value: 'tom',
-                        label: 'Tom',
-                    },
-                    ]}
-                 />
-                <Select
-                    showSearch
-                    placeholder="Select a person"
-                    optionFilterProp="children"
-                    onChange={onChange}
-                    onSearch={onSearch}
-                    filterOption={filterOption}
-                    size='middle'
-                    className='w-[240px]'
-                    dropdownStyle={{backgroundColor: 'black', color: 'red'}}
-                    options={[
-                    {
-                        value: 'jack',
-                        label: 'Jack',
-                    },
-                    {
-                        value: 'lucy',
-                        label: 'Lucy',
-                    },
-                    {
-                        value: 'tom',
-                        label: 'Tom',
-                    },
-                    ]}
-                 />
+            <div className='flex w-full justify-center items-center my-2 gap-4'>
+                <div className='flex gap-4'>
+                    <Select
+                        value={genre}
+                        defaultValue={''}
+                        size='large'
+                        onChange={(v)=>{setGenre(v)}}
+                        className='w-[240px] max-sm:w-[120px]'
+                        dropdownStyle={{backgroundColor: 'black', color: 'red'}}
+                        options={genres}
+                    />
 
-                 <div className='flex px-2 py-1 border-[1px] rounded-md border-primary bg-secondery text-font w-[300px]'>
-                    <input 
-                        type='email' value={title} onChange={handleChange} placeholder='Título' 
-                        className='bg-secondery outline-none text-font border-hidden w-full text-lg'
+                    <Input 
+                        type='text' 
+                        value={title} 
+                        onChange={handleChange} 
+                        placeholder='Título' 
+                        size='large'
+                        className='bg-secondery w-[240px] max-sm:w-[200px]'
+
                     />
                 </div>
-            </form>
+            </div>
             <div>
-                {loading ? 
-                <div className="w-full flex justify-center items-center">
-                    <div className="w-10 h-10 bg-gray-200 rounded-full animate-spin"></div>
-                </div>
-                :
-                <div>
-                    {data.length > 0 &&
-                        <div id='movie-section' className='flex flex-wrap justify-center gap-2 w-full overflow-auto h-[600px]'>
-                            {data.map((movie, key)=>{
-                                return(
-                                    <div key={key} className={`w-[155px] max-sm:w-[100px] border-2 ${movie.status ? 'border-primary' : 'border-gray-700'}`} onClick={()=>{handleMovieClick(movie.id)}}>
-                                        <img src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} className='w-[160px] h-[220px] bg-posternull max-sm:w-[100px] max-sm:h-[130px]' style={{backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}/>
-                                        <p className='text-sm text-font font-semibold mt-1 max-sm:text-xs'>{movie.title}</p>
-                                    </div>
-                                )
-                            })}
-                        </div>    
+                <div id='movie-section' className='flex flex-wrap justify-center gap-2 w-full overflow-auto h-[600px]'>
+                    {movies.length > 0 ?
+                        movies.map((movie, key)=>{
+                            return(
+                                <div key={key} className={`w-[155px] max-h-[320px] max-sm:w-[100px] border-2 ${movie.status ? 'border-primary' : 'border-gray-700'}`} onClick={()=>{handleMovieClick(movie.id)}}>
+                                    <img src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} className='w-[160px] h-[220px] bg-posternull max-sm:w-[100px] max-sm:h-[130px]' style={{backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}/>
+                                    <p className='text-sm text-font font-semibold text-center py-1 bg-red-300 mt-1 max-sm:text-xs'>{movie.title}</p>
+                                </div>
+                            )
+                        })
+                        :
+                        <div className='flex justify-center items-center w-full'>
+                            <h3 className='text-xl font-bold'>Filme não encontrado</h3>
+                        </div>
                     }
-            
-                </div>
-                }
-            </div>       
+                </div>    
+            </div>
         </>
     )
 }

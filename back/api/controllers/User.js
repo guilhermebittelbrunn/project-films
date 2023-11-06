@@ -1,8 +1,8 @@
 const { User, List, Movie, Streaming } = require('../modules/index');
 const bcrypt = require('bcryptjs');
 const JWT = require('jsonwebtoken');
+const colors = require('colors');
 const { Op } = require('sequelize');
-const salt = 10;
 
 const UserController = {
     post: async (req, res) => {
@@ -65,14 +65,19 @@ const UserController = {
         const { email, password } = req.body;
         try {
             const user = await User.findOne({
-                raw: true,
                 where: { email },
+                include: {
+                    model: Streaming,
+                    required: true,
+                    // through: [''],
+                    attributes: { exclude: ['json'] },
+                },
             });
             if (!user) {
                 throw 'e-mail or password incorrect';
             }
-            if (bcrypt.compareSync(password, user.password)) {
-                const { password, ...userData } = user;
+            if (bcrypt.compareSync(password, user.dataValues.password)) {
+                const { password, ...userData } = user.dataValues;
                 const secret = process.env.JWT_TOKEN_SECRET;
                 const jwt = JWT.sign({ id: user.id }, secret, { expiresIn: 600 });
                 // res.header('Access-Control-Expose-Headers', 'Authorization-Token');
@@ -82,17 +87,33 @@ const UserController = {
             throw 400;
         } catch (error) {
             console.log(error);
-            return res.status(400).send('access denied');
+            return res.status(400).send({ msg: 'password or email is incorret', error });
         }
     },
     get: async (req, res) => {
         const { id } = req.params;
-        const user = await User.findByPk(id, { raw: true });
-        if (user) {
-            const { password, ...userData } = user;
-            return res.status(200).send(userData);
+        const token = req.header('authorization-token');
+        const parsedToken = JSON.parse(atob(token.split('.')[1]));
+        try {
+            if (parsedToken.id !== id) {
+                throw 'access denied, token id is not the same as id paramam';
+            }
+            const user = await User.findByPk(id, {
+                include: {
+                    model: Streaming,
+                    required: true,
+                    through: [''],
+                    attributes: { exclude: ['json'] },
+                },
+            });
+            if (user) {
+                const { password, ...userData } = user.dataValues;
+                return res.status(200).send(userData);
+            }
+            throw 'uset not found';
+        } catch (error) {
+            return res.status(403).send({ msg: 'an error occoured to get information about user', error });
         }
-        return res.status(400).send("user doesn't exist");
     },
     getByEmail: async (req, res) => {
         const { email } = req.query;

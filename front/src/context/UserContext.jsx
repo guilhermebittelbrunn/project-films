@@ -53,6 +53,8 @@ export default function UserProvider({children}){
                     const {data} = await api.get(`user/${id}`);
                     setUser(data);
                 } catch (error) {
+                    console.log(error);
+                    handleLogout();
                     message.warning('Sessão expirada, faça login novamente');
                 }
             }
