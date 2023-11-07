@@ -1,7 +1,4 @@
-// const Movie = require('../modules/Movie');
-// const Streaming = require('../modules/Streaming');
-// const Genre = require('../modules/Genre');
-const { Movie, Genre } = require('../modules/index');
+const { Movie, Genre, List } = require('../modules/index');
 const Streaming = require('../modules/Streaming');
 const { Op, json } = require('sequelize');
 const path = require('path');
@@ -30,6 +27,7 @@ function shuffle(array) {
 const MovieController = {
     get: async (req, res) => {
         const { id } = req.params;
+        const { idUser } = req.query;
         try {
             const movie = await Movie.findByPk(id, {
                 // raw: true,
@@ -49,6 +47,13 @@ const MovieController = {
                         // attributes: ["name"],
                         through: [''],
                         attributes: { exclude: ['json'] },
+                    },
+                    {
+                        model: List,
+                        required: false,
+                        where: {
+                            idUser,
+                        },
                     },
                 ],
             });
