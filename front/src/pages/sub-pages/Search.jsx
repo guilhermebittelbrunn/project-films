@@ -3,13 +3,12 @@ import { Select, Input, Spin } from 'antd';
 import api from '../../api';
 import MovieModal from '../../components/MovieModal';
 
-export default function SearchSection(){
+export default function SearchSection({setModalSettings}){
     const [title, setTItle] = useState('');
     const [movies, setMovies] = useState([]);
     const [genres, setGenres] = useState([]);
     const [genre, setGenre] = useState('');
     const [loading, setLoading] = useState(true);
-    const [modalSettings, setModalSettings] = useState({id: null, status: false});
 
     function handleMovieClick(id){
         setModalSettings({id: id, status:true});
@@ -36,16 +35,10 @@ export default function SearchSection(){
         })();
     },[])
 
-    
-    useEffect(()=>{
-        console.log(modalSettings);
-    }, [modalSettings])
-
     useEffect(()=>{
         (async()=>{
             try {
                 const movies = await api.get(`/movie?limit=&title=${title.trim()}&genres=[${genre}]`);
-                console.log(`/movie?limit=133&title=${title.trim()}&genres[${genre}]`)
                 setMovies(movies.data);
             } catch (error) {
                 console.log(error);
@@ -113,7 +106,7 @@ export default function SearchSection(){
                     }
                 </div>    
             </div>
-            <MovieModal id={modalSettings.id} status={modalSettings.status} setIsModalOpen={setModalSettings}/>
+            
         </>
     )
 }

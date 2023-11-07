@@ -9,6 +9,8 @@ import useSizeElement from './useSizeElement'
 import './Slider.scss'
 
 const Slider = ({ children, activeSlide }) => {
+
+
   const [currentSlide, setCurrentSlide] = useState(activeSlide);
   const { width, elementRef } = useSizeElement();
   const {

@@ -1,10 +1,17 @@
 import React from 'react'
 import './SliderWrapper.scss'
 
-const SliderWrapper = ({ children }) => (
-  <div className="slider-wrapper">
-    {children}
-  </div>
-);
+export default function SliderWrapper({ children }){
+  
+ 
 
-export default SliderWrapper;
+  return(
+    <div className="slider-wrapper">
+      {children}
+    </div>
+  )
+}    
+
+
+
+

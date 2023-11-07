@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {UserContext} from '../context/UserContext'
 import { UserOutlined, GithubOutlined, LinkedinFilled, MailOutlined, MenuOutlined } from '@ant-design/icons'
 import ImageIcon from '../assets/logo.png'
-
+import MovieModal from "../components/MovieModal";
 
 export default function Home({children, title, subtitle}){
     const {user, handleLogout} = useContext(UserContext);
+    const [modalSettings, setModalSettings] = useState({id: null, status: false});
+
 
     return(
         <div className="w-full flex flex-col justify-between h-screen max-w-7xl px-[1%] m-auto">
@@ -18,18 +20,25 @@ export default function Home({children, title, subtitle}){
                 <ul className="flex gap-4 justify-center items-center">
                     {user ?
                         <>
-                            <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">
-                                <Link to='/'>Home</Link>
-                            </li>
+                            <Link to='/'>
+                                <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">
+                                    Home
+                                </li>
+                            </Link>
+
                             <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">Listas</li>
-                            <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">
-                                <Link to='/search'>Buscar</Link>
-                            </li>
-                            <li>
-                                <Link to='/profile'>
+                            
+                            <Link to='/search'>
+                                <li className="font-semibold transition-all hover:cursor-pointer hover:text-primary">
+                                    Buscar
+                                </li>
+                            </Link>
+
+                            <Link to='/profile'>
+                                <li>
                                     <UserOutlined className="font-semibold transition-all hover:cursor-pointer hover:text-primary"/>
-                                </Link>
-                            </li>
+                                </li>
+                            </Link>
                         </>
                         :
                         <>
@@ -54,7 +63,16 @@ export default function Home({children, title, subtitle}){
                             <h2 className="text-3xl max-sm:text-xl">{subtitle}</h2>
                         </header>
                         <div className="min-h-[600px]flex flex-col justify-center items-center"> 
-                            {children}
+                            <div>
+                                {React.Children.map(children, child => {
+                                    // Verifica se o elemento filho é válido antes de cloná-lo
+                                    if (React.isValidElement(child)) {
+                                    // Clona o elemento filho e adiciona a propriedade 'title'
+                                    return React.cloneElement(child, { modalSettings, setModalSettings });
+                                    }
+                                    return child;
+                                })}
+                             </div>
                         </div>
                     </div>
                     :
@@ -90,6 +108,8 @@ export default function Home({children, title, subtitle}){
                     </li>
                 </ul>
             </footer>
+
+            <MovieModal id={modalSettings.id} status={modalSettings.status} setIsModalOpen={setModalSettings}/>
         </div>
     )
 } 

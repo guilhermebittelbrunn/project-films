@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Spin, Tabs } from 'antd';
 import Slider from '../../components/Slider'
 import useFetch from '../../hooks/useFetch';
-import MovieModal from '../../components/MovieModal';
 
-function TabItemContent({url}){
+function TabItemContent({url, setModalSettings}){
   const [movieHTMLComponents, setMovieHTMLComponents] = useState([]);
-  const [modalSettings, setModalSettings] = useState({data: null, status: false});
   const {data, loading, error} = useFetch(url);
 
   useEffect(() => {
@@ -28,7 +26,7 @@ function TabItemContent({url}){
                     title: movie.title,
                     description: movie.sinopse,
                   }
-                  return <Slider.Item movie={movieItem} key={key + k + movie.id}>item1</Slider.Item>
+                  return <Slider.Item movie={movieItem} key={key + k + movie.id} setModalSettings={setModalSettings}>item1</Slider.Item>
                 })} 
             </Slider>
           </div>  
@@ -55,26 +53,25 @@ function TabItemContent({url}){
           movieHTMLComponents
         }
       </div> 
-      <MovieModal data={modalSettings.data} status={modalSettings.status} setIsModalOpen={setModalSettings}/>
     </>
   )
 }
 
 
 
-export default function Main(){
+export default function Main({modalSettings, setModalSettings}){
   const [url,setUrl] = useState('/movie/genres')
 
   const tabItems = [
     {
       key: '1',
       label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Descobertas</h3>,
-      children: <TabItemContent url={url}/>
+      children: <TabItemContent url={url} modalSettings={modalSettings} setModalSettings={setModalSettings}/>
     },
     {
       key: '2',
       label: <h3 className='text-xl font-bold mx-8 max-sm:mx-2 max-sm:text-sm uppercase'>Recomendações</h3>,
-      children: <TabItemContent url={url}/>
+      children: <TabItemContent url={url} modalSettings={modalSettings} setModalSettings={setModalSettings}/>
     },
   ];
 
