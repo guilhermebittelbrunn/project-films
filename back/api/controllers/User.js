@@ -12,7 +12,7 @@ const UserController = {
         try {
             const crypetedPassword = bcrypt.hashSync(password);
             const newUser = await User.create({ name, email, password: crypetedPassword });
-            const newList = await List.create({ name: 'favorites', idUser: newUser.id });
+            const newList = await List.create({ name: 'Favoritos', idUser: newUser.id });
             const listMovies = await Movie.findAll({
                 where: {
                     id: {

@@ -1,14 +1,23 @@
-const { List, User } = require('../modules/index');
+const { List, User, Movie } = require('../modules/index');
 
 const ListController = {
     post: async (req, res) => {
         const { name, idUser } = req.body;
         try {
+            const list = await List.findOne({ where: { name, idUser } });
+            console.log(list);
+            if (list) throw 'list already exists';
+
             const newList = await List.create({ name, idUser });
-            res.status(201).send({ message: 'list created succesfully', listName: newList.dataValues.name });
+            const allLists = await List.findAll({
+                raw: true,
+                where: {
+                    idUser: idUser,
+                },
+            });
+            res.status(201).send(allLists);
         } catch (err) {
-            console.log(err);
-            res.send({ msg: 'error to create list', error: err });
+            res.status(400).send({ msg: 'error to create list', error: err });
         }
     },
     get: async (req, res) => {
@@ -31,12 +40,19 @@ const ListController = {
                     idUser: id,
                 },
                 include: {
-                    model: User,
-                    required: true,
-                    attributes: { exclude: ['password'] },
+                    model: Movie,
+                    required: false,
+                    attributes: { exclude: ['json'] },
                 },
             });
-        } catch (err) {}
+
+            if (lists) {
+                return res.status(200).send(lists);
+            }
+            throw 'list not found';
+        } catch (error) {
+            return res.status(403).send({ msg: 'an error occoured to get information about list', error });
+        }
     },
     delete: async (req, res) => {
         const { id } = req.params;
