@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
 import SliderContext from './context'
-import Content from './Content'
 import SlideButton from './SlideButton'
 import SliderWrapper from './SliderWrapper'
 import useSliding from './useSliding'
@@ -48,7 +47,6 @@ const Slider = ({ children, activeSlide }) => {
         {hasPrev && <SlideButton onClick={handlePrev} type="prev" />}
         {hasNext && <SlideButton onClick={handleNext} type="next" />}
       </SliderWrapper>
-      {currentSlide && <Content movie={currentSlide} onClose={handleClose} />}
     </SliderContext.Provider>
   );
 };

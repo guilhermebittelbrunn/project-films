@@ -8,6 +8,7 @@ import PageNotFound from './pages/PageNotFound'
 import Main from './pages/sub-pages/Main'
 import Search from './pages/sub-pages/Search'
 import Profile from './pages/sub-pages/Profile'
+import Lists from './pages/sub-pages/Lists'
 
 export default function Router(){
     return(
@@ -15,6 +16,7 @@ export default function Router(){
             <Route path='/login' element={<CustomRoute><Login/></CustomRoute>}/>
             <Route path='/register' element={<CustomRoute><Register/></CustomRoute>}/>
             <Route path='/' element={<Home title='Home' subtitle='Explore filmes diversos'><Main/></Home>}/>  
+            <Route path='/lists' element={<PriveteRoute><Home title='Minhas Listas' subtitle='Explore e crie novas listas'><Lists/></Home></PriveteRoute>}/>  
             <Route path='/search' element={<PriveteRoute><Home title='Buscar' subtitle='Busque pelos seus filmes favoritos'><Search/></Home></PriveteRoute>}/>  
             <Route path='/profile' element={<PriveteRoute><Home title='Perfil' subtitle='Informações básicas'><Profile/></Home></PriveteRoute>}/>  
             <Route path='*' element={<PageNotFound/>}/>  

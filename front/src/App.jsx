@@ -12,7 +12,7 @@ export default function App(){
     return(
       <div className="text-font">
         <BrowserRouter>
-          <ConfigProvider locale={pt_BR} theme={{components:{Select: selectStyle, Input: inputStyle},token: {colorPrimary: '#09B54E', colorText: '#FAFAFA',}}}>
+          <ConfigProvider locale={pt_BR} theme={{components:{Select: selectStyle, Input: inputStyle},token: {colorPrimary: '#09B54E', colorText: '#FAFAFA', colorBgBase: '#171717'}}}>
             <UserProvider>
               <Router/>
             </UserProvider>

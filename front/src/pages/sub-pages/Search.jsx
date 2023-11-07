@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Select, Input, Spin } from 'antd';
 import api from '../../api';
-import MovieModal from '../../components/MovieModal';
 
 export default function SearchSection({setModalSettings}){
     const [title, setTItle] = useState('');

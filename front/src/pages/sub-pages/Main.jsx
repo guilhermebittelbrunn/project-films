@@ -85,7 +85,6 @@ export default function Main({modalSettings, setModalSettings}){
   }
 
     return (
-      <>
         <Tabs 
           className='w-full'
           tabBarStyle={{width:'100%', margin: 'auto'}}
@@ -95,7 +94,6 @@ export default function Main({modalSettings, setModalSettings}){
           onChange={handleTabChange}
           indicatorSize={160}
         />
-      </>
     )
 }
 

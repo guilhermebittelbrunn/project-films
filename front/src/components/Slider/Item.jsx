@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
 import SliderContext from './context'
-import Mark from './Mark'
 import './Item.scss'
 
 export default function  Item({ movie, setModalSettings }){
@@ -19,11 +18,13 @@ export default function  Item({ movie, setModalSettings }){
             className={cx('item', {
               'item--open': isActive,
             })}
-          
+            style={{position: 'relative'}}
           >
-            <img src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'} alt=""/>
+            <img src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'} alt={movie.title}/>
             {/* <img src={movie.image} alt=""/> */}
-            {isActive && <Mark />}
+            {/* <span className='absolute bottom-0 left-0 text-center w-full'>
+              {movie.title}
+            </span> */}
           </div>
         );
       }}

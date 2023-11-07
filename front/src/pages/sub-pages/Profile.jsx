@@ -13,7 +13,7 @@ export default function Profile(){
 
     return(
         <div>
-            <h4>Bem-vindo a área inicial {JSON.stringify(user)}</h4>
+            <h4>{user.name}</h4>
             <button onClick={handleClick} className="bg-blue-300">Fazer requisição teste</button>
             <br></br>
             <button onClick={handleLogout} className="bg-red-500">Logout</button>
