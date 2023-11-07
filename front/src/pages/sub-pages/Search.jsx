@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import useFetch from '../../hooks/useFetch';
 import { Select, Input, Spin } from 'antd';
 import api from '../../api';
+import MovieModal from '../../components/MovieModal';
 
 export default function SearchSection(){
     const [title, setTItle] = useState('');
@@ -9,9 +9,10 @@ export default function SearchSection(){
     const [genres, setGenres] = useState([]);
     const [genre, setGenre] = useState('');
     const [loading, setLoading] = useState(true);
+    const [modalSettings, setModalSettings] = useState({id: null, status: false});
 
     function handleMovieClick(id){
-        console.log(id);
+        setModalSettings({id: id, status:true});
     }
 
     useEffect(()=>{
@@ -36,6 +37,10 @@ export default function SearchSection(){
     },[])
 
     
+    useEffect(()=>{
+        console.log(modalSettings);
+    }, [modalSettings])
+
     useEffect(()=>{
         (async()=>{
             try {
@@ -86,7 +91,12 @@ export default function SearchSection(){
                     {movies.length > 0 ?
                         movies.map((movie, key)=>{
                             return(
-                                <div key={key} className={`w-[155px] max-h-[320px] max-sm:w-[100px] transition-colors border-gray-700 border-2 hover:cursor-pointer hover:border-primary`} onClick={()=>{handleMovieClick(movie.id)}}>
+                                <div 
+                                    key={key} className={`w-[155px] max-h-[320px] max-sm:w-[100px]
+                                    transition-colors border-gray-700
+                                    border-2 hover:cursor-pointer hover:border-primary`} 
+                                    onClick={()=>{handleMovieClick(movie.id)}}
+                                >
                                     <img 
                                         src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} 
                                         className='w-[160px] h-[220px] bg-posternull max-sm:w-[100px] max-sm:h-[130px]' 
@@ -103,6 +113,7 @@ export default function SearchSection(){
                     }
                 </div>    
             </div>
+            <MovieModal id={modalSettings.id} status={modalSettings.status} setIsModalOpen={setModalSettings}/>
         </>
     )
 }

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Spin, Tabs } from 'antd';
 import Slider from '../../components/Slider'
 import useFetch from '../../hooks/useFetch';
+import MovieModal from '../../components/MovieModal';
 
 function TabItemContent({url}){
   const [movieHTMLComponents, setMovieHTMLComponents] = useState([]);
+  const [modalSettings, setModalSettings] = useState({data: null, status: false});
   const {data, loading, error} = useFetch(url);
 
   useEffect(() => {
@@ -35,23 +37,26 @@ function TabItemContent({url}){
     }
     setMovieHTMLComponents(htmlElementCollection);
   }, [data]);
-
-
+  
+  
   return(
+    <>
       <div className='flex flex-col min-h-[600px] items-center w-12/12 mt-10' key={2}>
         {error ?
           <div className='text-center text-red-500 text-xl font-bold mt-10'>
             {error}
           </div>
         :
-          loading ? 
-          <div className='w-full flex justify-center items-center'>
+        loading ? 
+        <div className='w-full flex justify-center items-center'>
             <Spin size='large'/>
           </div>
           :
           movieHTMLComponents
-          }
+        }
       </div> 
+      <MovieModal data={modalSettings.data} status={modalSettings.status} setIsModalOpen={setModalSettings}/>
+    </>
   )
 }
 
@@ -59,7 +64,7 @@ function TabItemContent({url}){
 
 export default function Main(){
   const [url,setUrl] = useState('/movie/genres')
-  
+
   const tabItems = [
     {
       key: '1',
@@ -83,6 +88,7 @@ export default function Main(){
   }
 
     return (
+      <>
         <Tabs 
           className='w-full'
           tabBarStyle={{width:'100%', margin: 'auto'}}
@@ -92,6 +98,7 @@ export default function Main(){
           onChange={handleTabChange}
           indicatorSize={160}
         />
+      </>
     )
 }
 

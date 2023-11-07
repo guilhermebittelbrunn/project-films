@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import {UserContext} from '../context/UserContext'
 import { UserOutlined, GithubOutlined, LinkedinFilled, MailOutlined, MenuOutlined } from '@ant-design/icons'
-
+import ImageIcon from '../assets/logo.png'
 
 
 export default function Home({children, title, subtitle}){
@@ -12,8 +12,8 @@ export default function Home({children, title, subtitle}){
         <div className="w-full flex flex-col justify-between h-screen max-w-7xl px-[1%] m-auto">
             <nav className="flex w-full justify-between text-lg py-2">
                 <div className="flex gap-2 justify-center items-center">
-                    <img src="" alt="logo" />
-                    <h2>Title</h2>
+                    <img src={ImageIcon} width={200} alt="logo" />
+                    {/* <h2>CineSync</h2> */}
                 </div>
                 <ul className="flex gap-4 justify-center items-center">
                     {user ?
