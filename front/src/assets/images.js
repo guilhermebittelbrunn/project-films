@@ -97,3 +97,87 @@ export const listOfStreaming = [
         name: 'Star Plus',
     },
 ];
+
+export const CarouselImages = [
+    [
+        {
+            id: 1,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 2,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 3,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 4,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 5,
+            image: '',
+            alt: '',
+        },
+    ],
+    [
+        {
+            id: 6,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 7,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 8,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 9,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 10,
+            image: '',
+            alt: '',
+        },
+    ],
+    [
+        {
+            id: 11,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 12,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 13,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 14,
+            image: '',
+            alt: '',
+        },
+        {
+            id: 15,
+            image: '',
+            alt: '',
+        },
+    ],
+];
