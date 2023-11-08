@@ -48,11 +48,12 @@ export default function MovieModal({id, status, setIsModalOpen}){
         }
     }
 
-    function postMovieList(lisName){
-        console.log('add', lisName)
+    async function postMovieList(listName){
+        const res = await api.post(`/lists/${user.id}`, {name:listName, idMovie: id});
+        console.log(res);
     }
-    function removeMovieList(){
-        console.log('remove', lisName)
+    function removeMovieList(listName){
+        console.log('remove', listName)
     }
 
     function handleCloseModal(e){
@@ -74,7 +75,7 @@ export default function MovieModal({id, status, setIsModalOpen}){
                         id='content'
                         className='bg-secondery opacity-100 rounded-md border-[2px] border-primary 
                         flex flex-col justify-between  items-center absolute top-2/4 min-h-[300px]
-                        left-2/4 transform translate-x-[-50%] translate-y-[-50%] w-[95%] max-w-[600px]
+                        left-2/4 transform translate-x-[-50%] translate-y-[-50%] w-[95%] max-w-[500px]
                     '>
                         {loading ? 
                         <Spin size='large' className='m-auto'/>
@@ -86,19 +87,19 @@ export default function MovieModal({id, status, setIsModalOpen}){
                                 onClick={()=>{setIsModalOpen({id: null, status: false})}}
                             />
                             {
-                                selectedItems.find(list=>{return list === 'favorites'}) ?
+                                selectedItems.find(list=>{return list === 'Favoritos'}) ?
                                     <StarFilled 
                                         className='absolute top-3 left-2 transition-all 
                                         hover:cursor-pointer hover:scale-110 z-20 text-2xl
                                         text-yellow-400'
-                                        onClick={()=>{handleClickMovieList('favourites',false)}}
+                                        onClick={()=>{handleClickMovieList('Favoritos',false)}}
                                     />
                                     :
                                     <StarOutlined 
                                         className='absolute top-3 left-2 transition-all 
                                         hover:cursor-pointer hover:scale-110 z-20 text-2xl
                                         text-yellow-400'
-                                        onClick={()=>{handleClickMovieList('favourites',true)}}
+                                        onClick={()=>{handleClickMovieList('Favoritos',true)}}
                                     />
                             }
                            
@@ -151,7 +152,7 @@ export default function MovieModal({id, status, setIsModalOpen}){
                                         </div>
                                     </div>
 
-                                    <p id='modal-section' className='text-sm mx-4 pr-2 my-2 text-justify max-h-[200px] overflow-auto rounded-lg'>{data.sinopse}</p>
+                                    <p id='modal-section' className='text-sm mx-4 pr-2 my-2 text-justify max-h-[160px] overflow-auto rounded-lg'>{data.sinopse}</p>
                                     <div id='bts' className='flex flex-col justify-center items-center gap-2 mt-4 pb-2 w-full'>
                                          
                                         <div className='flex w-full m-auto justify-center items-center gap-1'>

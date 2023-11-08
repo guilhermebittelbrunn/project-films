@@ -20,8 +20,8 @@ export default function  Item({ movie, setModalSettings }){
             })}
             style={{position: 'relative'}}
           >
-            <img src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'} alt={movie.title}/>
-            {/* <img src={movie.image} alt=""/> */}
+            {/* <img src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'} alt={movie.title}/> */}
+            <img src={movie.image} alt={movie.title}/>
             {/* <span className='absolute bottom-0 left-0 text-center w-full'>
               {movie.title}
             </span> */}
