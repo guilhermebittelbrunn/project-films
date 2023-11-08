@@ -1,13 +1,13 @@
 import { CloseOutlined, StarFilled, StarOutlined, PlusOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react';
 import useFetch from '../hooks/useFetch'
-import { Spin, Tooltip  } from 'antd';
+import { Spin, Tooltip, Popconfirm, Input } from 'antd';
 import { listOfStreaming } from '../assets/images'
 import { useContext } from 'react';
 import {UserContext} from '../context/UserContext'
 import { Select, message } from 'antd'
 import api from '../api';
-
+import dayjs from 'dayjs';
 
 export default function MovieModal({id, status, setIsModalOpen}){
     if(!id || !status)return
@@ -16,6 +16,8 @@ export default function MovieModal({id, status, setIsModalOpen}){
     const {data, loading, error} = useFetch(`movie/${id}?idUser=${user.id}`);
     const [selectedItems, setSelectedItems] = useState([]);
     const [options, setOptions] = useState([]);
+    const [popConfirmInputValue, setPopConfirmInputValue] = useState('');
+    
     const filteredOptions = options.filter((o) => !selectedItems.includes(o));
 
 
@@ -36,15 +38,18 @@ export default function MovieModal({id, status, setIsModalOpen}){
         status ? postMovieList(listName) : removeMovieList(listName)
     }
 
-    async function handleCreateList(){
+    async function handleCreateList(e){
+        if(!popConfirmInputValue)return
+
         try{
-            const listName = prompt('list name');
-            const res = await api.post('/lists', {idUser: user.id, name: listName});
+            const res = await api.post('/lists', {idUser: user.id, name: popConfirmInputValue});
             setOptions(res.data.map(list=>list.name));
         }catch(err){
             if(err.response.data.error){
                 message.error('Já existe uma lista com esse nome');
             }
+        }finally{
+            setPopConfirmInputValue('');
         }
     }
 
@@ -57,8 +62,8 @@ export default function MovieModal({id, status, setIsModalOpen}){
     }
 
     function handleCloseModal(e){
-        const content = document.getElementById('content');
-        if(!content.contains(e.target) && e.target.className !== 'ant-select-item-option-content'){
+        const backgroundModal = document.getElementById('backgroundModal');
+        if(e.target === backgroundModal){
             setIsModalOpen({id: null, status:false});
         }
     } 
@@ -67,6 +72,7 @@ export default function MovieModal({id, status, setIsModalOpen}){
         return(
             <>
                 <div 
+                    id='backgroundModal'
                     className='w-full h-[100%] z-20 left-0 top-0 fixed overflow-hidden' 
                     style={{backgroundColor: 'rgba(27, 27, 27, .7)'}}
                     onClick={handleCloseModal}
@@ -83,7 +89,8 @@ export default function MovieModal({id, status, setIsModalOpen}){
                         <div className='flex flex-col justify-between items-center w-full'>
                             <CloseOutlined 
                                 className='absolute top-3 right-3 transition-all font-bold
-                                hover:cursor-pointer hover:scale-110 z-20 text-2xl'
+                                hover:cursor-pointer hover:scale-110 z-20 text-2xl rounded-full p-1'
+                                style={{backgroundColor: 'rgba(0,0,0,.2)'}}
                                 onClick={()=>{setIsModalOpen({id: null, status: false})}}
                             />
                             {
@@ -105,7 +112,7 @@ export default function MovieModal({id, status, setIsModalOpen}){
                            
                             
                                 <div className='relative flex justify-center items-center w-full'>
-                                    <img src={`https://image.tmdb.org/t/p/w500/${data.backdrop_path}`} alt={data.title} className='w-full z-10'/>
+                                    <img src={`https://image.tmdb.org/t/p/w500/${data.backdrop_path}`} alt={data.title} className='w-full border border-secondery rounded-t-md z-10'/>
                                     <div className='absolute gap-4 left-[0%] bottom-0 w-full flex justify-center items-centerbottom-0 z-20 py-2' style={{backgroundColor: 'rgb(0,0,0, .3)'}}>
                                         {data.streamings &&
                                             data.streamings.map(streaming=>{
@@ -116,7 +123,6 @@ export default function MovieModal({id, status, setIsModalOpen}){
                                                 })
                                                 
                                             }).map(t=>{
-                                                console.log(t);
                                                 return(
                                                     <Tooltip title={t[0]?.name} key={t.id}>
                                                         <img src={t[0]?.icon} className='w-[35px] rounded-full transition-all hover:scale-150' alt={t[0]?.name}/>
@@ -128,7 +134,10 @@ export default function MovieModal({id, status, setIsModalOpen}){
                                     <Spin className='absolute left-[45%] top-24' size='large'/>
                                 </div>
                                 <div className='flex flex-col w-full'>
-                                    <span className='font-bold my-2 text-center text-primary text-lg'>{data.title}</span>
+                                    <div className='flex flex-col py-2'>
+                                        <span className='font-bold text-center text-primary text-lg'>{data.title}</span>
+                                        <span className='w-full mt-[-4px] text-center text-[14px] text-gray-400'>{dayjs(data.release).format('DD-MM-YYYY')}</span>
+                                    </div>
                                     <div id='tags' className='flex items-center justify-center gap-4 flex-wrap max-sm:gap-0'>
                                         {data.genres &&
                                             data.genres.map(genre=>{
@@ -153,39 +162,54 @@ export default function MovieModal({id, status, setIsModalOpen}){
                                     </div>
 
                                     <p id='modal-section' className='text-sm mx-4 pr-2 my-2 text-justify max-h-[160px] overflow-auto rounded-lg'>{data.sinopse}</p>
-                                    <div id='bts' className='flex flex-col justify-center items-center gap-2 mt-4 pb-2 w-full'>
-                                         
+                                    <span className='text-sm text-primary ml-4 font-medium'>Listas</span>
+                                    <div id='bts' className='flex flex-col justify-center items-center gap-2  px-4 pb-2 w-full'>
                                         <div className='flex w-full m-auto justify-center items-center gap-1'>
                                             <Select
                                                 id='select-modal'
                                                 mode="multiple"
                                                 placeholder="Listas"
+                                            
                                                 value={selectedItems}
                                                 onChange={setSelectedItems}
                                                 style={{
-                                                    width: '90%',
+                                                    width: '100%',
                                                 }}
                                                 options={filteredOptions.map((item) => ({
                                                     value: item,
                                                     label: item,
                                                 }))}
                                             />
-                                            <Tooltip title="Criar uma lista nova">
-                                                <button onClick={handleCreateList} className='border border-primary px-2 rounded-sm text-primary font-bold text-lg'>
-                                                    <PlusOutlined/>
-                                                </button>
-                                            </Tooltip>
+                                                <Popconfirm 
+                                                    className='border-2'
+                                                    id='select-modal'
+                                                    title="Criar uma lista nova"
+                                                    placement='left'
+                                                    icon={false}
+                                                    description={
+                                                        <Input value={popConfirmInputValue} 
+                                                        onChange={(e)=>{setPopConfirmInputValue(e.target.value)}}
+                                                         id='select-modal' type='text' placeholder='Nome da lista'/>
+                                                    }
+                                                    onConfirm={handleCreateList}
+                                                >
+                                                    <Tooltip title="Criar uma lista nova">
+                                                            <button className='border border-primary px-2 rounded-sm text-primary font-bold text-lg'>
+                                                                <PlusOutlined/>
+                                                            </button>
+                                                    </Tooltip>
+                                                </Popconfirm>
                                         </div>
 
                                         <button 
-                                            className='border border-primary py-2 px-4 text-sm rounded-md w-[97%] transition-all
+                                            className='border border-primary py-2 px-4 text-sm rounded-md w-[100%] transition-all
                                           bg-primary font-medium drop-shadow-2xl hover:opacity-80'
                                         >
                                             Adicionar em assistir mais tarde
                                         </button>
 
                                         <button 
-                                            className='border border-white py-2 px-4 text-sm rounded-md w-[97%] transition-all
+                                            className='border border-white py-2 px-4 text-sm rounded-md w-[100%] transition-all
                                             font-medium hover:text-primary hover:border-primary' onClick={()=>{handleClickMovieList('assitidos',)}}
                                         >   
                                             Marcar como assistido

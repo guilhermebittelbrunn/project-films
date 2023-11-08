@@ -9,7 +9,7 @@ export default function Login(){
     const {handleLogin} = useContext(UserContext);
     
     return(
-        <div className='w-full max-w-5xl m-auto py-2 flex justify-center items-center max-sm:absolute max-sm:top-2/4 max-sm:left-2/4 max-sm:transform max-sm:translate-x-[-50%] max-sm:translate-y-[-50%]'>
+        <div className='w-full max-w-5xl m-auto py-2 flex justify-center items-center absolute top-2/4 left-2/4 transform translate-x-[-50%] translate-y-[-50%]'>
               <form onSubmit={handleSubmit(handleLogin)} className='flex flex-col justify-center items-center w-full'>
                         <div className='px-4 flex flex-col justify-center items-center gap-4 w-full'>
                             
