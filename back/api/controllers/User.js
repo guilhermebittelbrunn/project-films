@@ -12,7 +12,12 @@ const UserController = {
         try {
             const crypetedPassword = bcrypt.hashSync(password);
             const newUser = await User.create({ name, email, password: crypetedPassword });
-            const newList = await List.create({ name: 'Favoritos', idUser: newUser.id });
+            const defaultLists = [
+                { name: 'Favoritos', idUser: newUser.id },
+                { name: 'Assistir mais tarde', idUser: newUser.id },
+                { name: 'Assistidos', idUser: newUser.id },
+            ];
+            const newList = await List.bulkCreate(defaultLists);
             const listMovies = await Movie.findAll({
                 where: {
                     id: {
@@ -28,7 +33,7 @@ const UserController = {
                 },
             });
             listMovies.forEach((movie) => {
-                movie.setLists(newList);
+                movie.setLists(newList[0]);
             });
             listStreamings.forEach((streaming) => {
                 streaming.setUsers(newUser);

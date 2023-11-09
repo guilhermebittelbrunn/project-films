@@ -111,18 +111,27 @@ const MovieController = {
         }
     },
     getMovieList: async (req, res) => {
-        const { limit, title, genres, streamings } = req.query;
+        const { limit, title, genres, streamings, listIdApi } = req.query;
+        const whereCondition = {};
+        console.log({ limit, title, genres, streamings, listIdApi });
+
+        if (title) {
+            whereCondition.title = {
+                [Op.like]: `%${title}%`,
+            };
+        }
+        if (listIdApi) {
+            whereCondition.idAPI = {
+                [Op.in]: JSON.parse(listIdApi),
+            };
+        }
         try {
             const movies = await Movie.findAll({
                 limit: +limit || 70,
                 attributes: { exclude: ['json'] },
                 // raw: true,
                 order: [['score_popularity', 'desc']],
-                where: {
-                    title: {
-                        [Op.like]: `%${title || ''}%`,
-                    },
-                },
+                where: whereCondition,
                 include:
                     genres || streamings
                         ? [

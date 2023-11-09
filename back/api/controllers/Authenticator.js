@@ -6,6 +6,7 @@ function authenticate(req, res, next) {
     try {
         const isTokenExist = jwt.verify(JSON.parse(token), secret);
         if (isTokenExist) {
+            req.idUser = JSON.parse(atob(token.split('.')[1])).id;
             return next();
         }
     } catch (error) {
