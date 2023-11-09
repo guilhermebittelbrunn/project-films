@@ -5,6 +5,10 @@ import api from "../../api";
 export default function Profile(){
     const { handleLogout, user } = useContext(UserContext);
 
+    useEffect(()=>{
+        console.log('user', user);
+    },[])
+
     async function handleClick(){
         const token = localStorage.getItem('token');
         const {data} = await api.get('user/test');

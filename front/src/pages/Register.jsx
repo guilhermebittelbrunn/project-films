@@ -1,8 +1,7 @@
-import { Button, Input, message, Image, Spin } from 'antd'
+import { message, Spin } from 'antd'
 import { UserOutlined, MailOutlined, KeyOutlined } from '@ant-design/icons'
-import { useForm, Controller } from 'react-hook-form' 
-import { UserContext } from '../context/UserContext';
-import { useContext, useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form' 
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listOfStreaming } from '../assets/images'
 import { Link } from 'react-router-dom'
@@ -61,10 +60,20 @@ export default function Register(){
         setMovies(x);
     }
 
+    function handleClickOutModal(e){
+        const backgroundModal = document.getElementById('background-modal');
+        if(e.target === backgroundModal){
+            setPhase(previousValue=> previousValue - 1);
+        }
+    }
+
+
     async function handleSubmitForm(data){
+    
         const favoriteProviders = providersList.filter(provider=>provider.status);
         const favoriteMovies = movies.filter(movie=>movie.status);
         const userData = {...data, streamings: favoriteProviders, movies: favoriteMovies}
+       
         if(favoriteMovies.length < 5){
             return message.warning('Selecione pelo menos 5 filmes para criar a conta');
         }
@@ -167,14 +176,15 @@ export default function Register(){
                     }
                     {
                         (phase === 3 || phase === 4) &&
+                        
                         <div className='flex flex-col justify-center text-center items-center w-full px-2'>
-                            <h1 className='font-bold text-xl mb-4'>Escolha seus filmes favoritos</h1>     
+                            <h1 className='font-bold text-xl mb-4'>Escolha seus filmes favoritos</h1>   
                                 <div>
                                     {movies.length > 0 &&
                                         <div id='movie-section' className='flex flex-wrap justify-center gap-2 w-full overflow-auto h-[75vh]'>
                                             {movies.map((movie, key)=>{
                                                 return(
-                                                    <div key={key} className={`w-[155px] max-sm:w-[100px] border-2 ${movie.status ? 'border-primary' : 'border-gray-700'}`} onClick={()=>{handleMovieClick(movie.id)}}>
+                                                    <div key={key} className={`w-[155px] max-sm:w-[100px] border-2 hover:cursor-pointer ${movie.status ? 'border-primary' : 'border-gray-700'}`} onClick={()=>{handleMovieClick(movie.id)}}>
                                                         <img src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} alt={movie.title} className='w-[160px] h-[220px] bg-posternull max-sm:w-[100px] max-sm:h-[130px]' style={{backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}}/>
                                                         <p className='text-sm text-font font-semibold mt-1 max-sm:text-xs'>{movie.title}</p>
                                                     </div>
@@ -193,7 +203,7 @@ export default function Register(){
                     }
                     {
                         phase === 4 &&
-                        <div className='w-screen h-screen absolute' style={{backgroundColor: 'rgba(27, 27, 27, .7)'}}>
+                        <div id='background-modal' className='w-screen h-screen absolute' style={{backgroundColor: 'rgba(27, 27, 27, .7)'}} onClick={handleClickOutModal}>
                             <div className='bg-secondery opacity-100 rounded-sm border-[2px] border-primary flex flex-col justify-between py-4 items-center w-[380px] absolute top-2/4 left-2/4 transform translate-x-[-50%] translate-y-[-50%]'>
                                 {isLoading ?
                                     <Spin/>
@@ -243,8 +253,14 @@ export default function Register(){
                                         </div>
                                     </div>
                                     <div className='flex justify-between w-full px-4 mt-2'>
-                                        <button onClick={()=>{setPhase(phase -1)}} className='w-[120px] bg-backgroundOne border-[2px] border-primary rounded-md px-3 py-1 transition-all opacity-70 hover:opacity-100'>Cancelar</button>
-                                        <button type='submit' className='w-[120px] bg-backgroundOne border-[2px] border-primary rounded-md px-3 py-1 transition-all opacity-70 hover:opacity-100'>Confirmar</button>
+                                        {isLoading ?
+                                            <Spin/>
+                                            :
+                                            <>
+                                                <button onClick={()=>{setPhase(phase -1)}} className='w-[120px] bg-backgroundOne border-[2px] border-primary rounded-md px-3 py-1 transition-all opacity-70 hover:opacity-100'>Cancelar</button>
+                                                <button type='submit' className='w-[120px] bg-backgroundOne border-[2px] border-primary rounded-md px-3 py-1 transition-all opacity-70 hover:opacity-100'>Confirmar</button>
+                                            </> 
+                                        }
                                     </div>
                                 </>
                                 }
