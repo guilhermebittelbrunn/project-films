@@ -1,14 +1,14 @@
 import { CloseOutlined, StarFilled, StarOutlined, PlusOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import useFetch from '../hooks/useFetch'
 import { Spin, Tooltip, Popconfirm, Input, Tabs } from 'antd';
-import { listOfStreaming } from '../assets/images'
-import { useContext } from 'react';
+import { images } from '../assets/images'
 import {UserContext} from '../context/UserContext'
 import { Select, message, Tag } from 'antd'
 import api from '../api';
 import dayjs from 'dayjs';
 import axios from 'axios';
+import {MovieContext} from '../context/MovieLists'
 
 const options = {
   method: 'GET',
@@ -19,13 +19,12 @@ const options = {
 };
 
 
-export default function MovieModal({id, status, setIsModalOpen}){
+export default function MovieModal({id, status, setIsModalOpen, options, setOptions}){
     if(!id || !status)return
     
+    const {postMovieList, removeMovieList, selectedItems, setSelectedItems} = useContext(MovieContext);
     const {user} = useContext(UserContext);
     const {data, loading, error} = useFetch(`movie/${id}?idUser=${user.id}`);
-    const [selectedItems, setSelectedItems] = useState([]);
-    const [options, setOptions] = useState([]);
     const [activeTab, setActiveTab] = useState('1');
     const [tabItems, setTabItems] = useState([])
 
@@ -37,19 +36,9 @@ export default function MovieModal({id, status, setIsModalOpen}){
     }
 
     function handleClickMovieList(listName, status){
-        status ? postMovieList(listName) : removeMovieList(listName)
+        status ? postMovieList(listName, id) : removeMovieList(listName, id)
     }
 
-    async function postMovieList(listName){
-        const res = await api.post(`/lists/${user.id}`, {name:listName, idMovie: id});
-        const listOptions = res.data.map(list=>list.name)
-        setOptions(listOptions);
-        setSelectedItems(data?.Lists.map(list=>list.name));
-    }
-    async function removeMovieList(listName){
-        const res = await api.delete(`/lists/${id}?name=${listName}`);
-        console.log(res.data);
-    }
 
     function findListInSelectedItems(listName){
         return selectedItems.find(item=>item === listName)
@@ -58,16 +47,10 @@ export default function MovieModal({id, status, setIsModalOpen}){
 
 
     useEffect(() => {
-        if(loading, error)return
-
-        (async()=>{
-            if(data){
-                const res = await api.get(`/lists/${user.id}`);
-                const listOptions = res.data.map(list=>list.name)
-                setOptions(listOptions);
-                setSelectedItems(data?.Lists.map(list=>list.name));
-            }
-        })()
+        if(loading && error)return
+        if(data.Lists){
+            setSelectedItems(data?.Lists.map(list=>list.name));
+        }
     }, [data])
 
     useEffect(()=>{
@@ -78,7 +61,7 @@ export default function MovieModal({id, status, setIsModalOpen}){
                 label: <h3 className='text-sm font-semibold w-full capitalize px-6'>Detalhes</h3>,
                 children: 
                     <Tab1 
-                        data={data} user={user} options={options} setOptions={setOptions}
+                        data={data} id={id} user={user} options={options} setOptions={setOptions}
                         selectedItems={selectedItems} handleClickMovieList={handleClickMovieList}
                         setSelectedItems={setSelectedItems} removeMovieList={removeMovieList}
                         findListInSelectedItems={findListInSelectedItems} postMovieList={postMovieList}
@@ -143,16 +126,10 @@ export default function MovieModal({id, status, setIsModalOpen}){
                                     <div className='absolute gap-4 left-[0%] bottom-0 w-full flex justify-center items-centerbottom-0 z-20 py-2' style={{backgroundColor: 'rgb(0,0,0, .3)'}}>
                                         {data.streamings &&
                                             data.streamings.map(streaming=>{
-                                                return listOfStreaming.filter(icon=>{
-                                                    if(icon.id === streaming.id){
-                                                        return icon?.icon
-                                                    }
-                                                })
-                                                
-                                            }).map(t=>{
+                                                const provider = images[streaming.id];
                                                 return(
-                                                    <Tooltip title={t[0]?.name} key={t.id}>
-                                                        <img src={t[0]?.icon} className='w-[35px] rounded-full transition-all hover:scale-150' alt={t[0]?.name}/>
+                                                    <Tooltip title={provider?.name} key={provider?.id}>
+                                                        <img src={provider?.icon} className='w-[35px] rounded-full transition-all hover:scale-150' alt={provider?.name}/>
                                                     </Tooltip>
                                                 ) 
                                             })
@@ -160,6 +137,7 @@ export default function MovieModal({id, status, setIsModalOpen}){
                                     </div>
                                     <Spin className='absolute left-[45%] top-24' size='large'/>
                                 </div>
+                                
                                 <div className='flex flex-col w-full'>
                                     <div className='flex flex-col py-2'>
                                         <span className='font-bold text-center text-primary text-lg'>{data.title}</span>
@@ -191,7 +169,7 @@ export default function MovieModal({id, status, setIsModalOpen}){
 }
 
 
-function Tab1({data, user, handleClickMovieList, handleCreateList, selectedItems, setSelectedItems, options, setOptions, removeMovieList, findListInSelectedItems}){
+function Tab1({data, user, id, handleClickMovieList, handleCreateList, selectedItems, setSelectedItems, options, setOptions, removeMovieList, findListInSelectedItems, postMovieList}){
 
     const [popConfirmInputValue, setPopConfirmInputValue] = useState('');
     const filteredOptions = options.filter((o) => !selectedItems.includes(o));
@@ -212,6 +190,10 @@ function Tab1({data, user, handleClickMovieList, handleCreateList, selectedItems
         }finally{
             setPopConfirmInputValue('');
         }
+    }
+
+    async function handleChangeSelect(value){
+        postMovieList(value[value.length - 1], id)
     }
 
 
@@ -241,18 +223,19 @@ function Tab1({data, user, handleClickMovieList, handleCreateList, selectedItems
             </div>
         </div>
 
-        <p id='modal-section' className='text-sm mx-4 pr-2 my-2 text-justify max-h-[160px] overflow-auto rounded-lg max-sm:max-h-[100px]'>{data.sinopse}</p>
+        <p id='modal-section' className='text-sm mx-4 pr-2 my-2 text-justify h-[169px] overflow-auto rounded-lg max-sm:max-h-[100px]'>{data.sinopse}</p>
         <span className='text-sm text-primary ml-4 font-medium'>Listas</span>
         <div id='bts' className='flex flex-col justify-center items-center gap-2  px-4 pb-2 w-full'>
             <div className='flex w-full m-auto justify-center items-center gap-1'>
                 <Select
+                    notFoundContent={null}
                     id='select-modal'
                     mode="multiple"
                     placeholder="Este filme não está em nenhuma de suas listas"
-                    tagRender={(data)=>{return (<TagRender {...data} onClose={removeMovieList}/>)}}
+                    tagRender={(data)=>{return (<TagRender {...data} id={id} onClose={removeMovieList}/>)}}
                     value={selectedItems}
                     onClose={removeMovieList}
-                    onChange={setSelectedItems}
+                    onChange={(e)=>{handleChangeSelect(e)}}
                     style={{
                         width: '100%',
                     }}
@@ -283,7 +266,7 @@ function Tab1({data, user, handleClickMovieList, handleCreateList, selectedItems
             </div>
 
             {
-                findListInSelectedItems('Assistir mais tarde') ?
+                findListInSelectedItems('Assistidos') ?
                     <button 
                         className='border border-red-600 py-2 px-4 text-sm rounded-md w-[100%] transition-all
                         bg-red-600 font-medium drop-shadow-2xl hover:opacity-80' onClick={()=>{handleClickMovieList('Assistidos',false)}} 
@@ -303,7 +286,7 @@ function Tab1({data, user, handleClickMovieList, handleCreateList, selectedItems
                     findListInSelectedItems('Assistir mais tarde') ?
                     <button 
                         className='border border-white py-2 px-4 text-sm rounded-md w-[100%] transition-all
-                        font-medium hover:text-primary hover:border-primary' onClick={()=>{handleClickMovieList('Assitir mais tarde',false)}}
+                        font-medium hover:text-primary hover:border-primary' onClick={()=>{handleClickMovieList('Assistir mais tarde',false)}}
                     >   
                         Remover de Assistir mais tarde
                     </button>
@@ -321,7 +304,7 @@ function Tab1({data, user, handleClickMovieList, handleCreateList, selectedItems
 }
 
 
-function TagRender( { label, value, closable, onClose }){
+function TagRender( { label, value, closable, onClose, id }){
 
 
   return (
@@ -329,7 +312,7 @@ function TagRender( { label, value, closable, onClose }){
       color={value}
       closable={closable}
       closeIcon
-      onClose={()=>{onClose('teste')}}
+      onClose={()=>{onClose(label, id)}}
       style={{
         border: '1px solid #09B54E',
         marginRight: 3,
@@ -387,7 +370,7 @@ function Tab2({id, setIsModalOpen, setActiveTab}){
                                             {/* <img src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} alt={data.title}/> */}
                                                 <img className='w-full rounded-md' src='https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg' alt={data.title}/>
                                             </Tooltip>
-                                        </div>
+                                    </div>
                                 )
                             })
                         }

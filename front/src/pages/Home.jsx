@@ -5,6 +5,7 @@ import { UserOutlined, GithubOutlined, LinkedinFilled, MailOutlined, MenuOutline
 import { Drawer, Carousel } from 'antd'
 import ImageIcon from '../assets/logo.png'
 import MovieModal from "../components/MovieModal";
+import { MovieContext } from "../context/MovieLists";
 
 const menuOptions = [
     {
@@ -30,6 +31,7 @@ const menuOptions = [
 ]
 
 export default function Home({children, title, subtitle}){
+    const {options, setOptions} = useContext(MovieContext);
     const {user, handleLogout} = useContext(UserContext);
     const [modalSettings, setModalSettings] = useState({id: null, status: false});
     const [open, setOpen] = useState(false);
@@ -73,8 +75,8 @@ export default function Home({children, title, subtitle}){
                     user ? 
                     <div className="w-full">
                         <header className="text-center w-full my-10 flex flex-col font-bold gap-3 justify-center items-center">
-                            <h1 className="text-5xl max-sm:text-3xl">{title}</h1>
-                            <h2 className="text-3xl max-sm:text-xl">{subtitle}</h2>
+                            <h1 className="text-4xl max-sm:text-3xl">{title}</h1>
+                            <h2 className="text-2xl max-sm:text-xl">{subtitle}</h2>
                         </header>
                         <div className="min-h-[600px] flex flex-col justify-center items-center"> 
                             <div>
@@ -239,7 +241,7 @@ export default function Home({children, title, subtitle}){
                 </div>
             </Drawer>
 
-            <MovieModal id={modalSettings.id} status={modalSettings.status} setIsModalOpen={setModalSettings}/>
+            <MovieModal id={modalSettings.id} status={modalSettings.status} setIsModalOpen={setModalSettings} options={options} setOptions={setOptions}/>
         </div>
     )
 } 

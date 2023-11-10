@@ -24,33 +24,25 @@ const ListController = {
         const { id } = req.params;
         const { name, idMovie } = req.body;
         try {
-            const list = await List.findOne({
-                where: { name: name, idUser: id },
+            let list = await List.findOne({ where: { name: name, idUser: id } });
+            if (!list) {
+                list = await List.create({ name: name, idUser: id });
+            }
+            const movie = await Movie.findByPk(idMovie);
+            list.addMovies(movie);
+            const lists = await List.findAll({
+                where: {
+                    idUser: id,
+                },
                 include: {
                     model: Movie,
                     required: false,
                     attributes: { exclude: ['json'] },
                 },
             });
-            if (list) {
-                const movie = await Movie.findByPk(idMovie);
-                list.addMovies(movie);
-                const lists = await List.findAll({
-                    where: {
-                        idUser: id,
-                    },
-                    include: {
-                        model: Movie,
-                        required: false,
-                        attributes: { exclude: ['json'] },
-                    },
-                });
-                return res.status(200).send(lists);
-            }
-            throw 'List not found';
+            return res.status(200).send(list);
         } catch (error) {
-            console.log(error);
-            res.status(400).send({ msg: 'Error to add movie to list' });
+            res.status(400).send({ msg: 'Error to add movie to list', error });
         }
     },
     get: async (req, res) => {
@@ -93,7 +85,7 @@ const ListController = {
             const list = await List.findByPk(id);
             if (list) {
                 await list.destroy();
-                return res.status(200).send('list deleted succesfully');
+                return res.status(200).send('list deleted successfully');
             }
             throw 'list not found';
         } catch (error) {
@@ -106,8 +98,8 @@ const ListController = {
         const idUser = req.idUser;
         try {
             const list = await List.findOne({ where: { name, idUser } });
-            const removedList = await list.removeMovies(id);
-            res.status(200).send(`${name} removed successfully`);
+            await list.removeMovies(id);
+            res.status(200).send(list);
         } catch (error) {
             res.status(400).send({ msg: 'an error occoured to delete movie in list', error });
         }

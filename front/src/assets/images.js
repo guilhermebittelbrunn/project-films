@@ -98,6 +98,89 @@ export const listOfStreaming = [
     },
 ];
 
+export const images = {
+    2: {
+        id: 2,
+        icon: Apple_TV,
+        name: 'Apple TV',
+    },
+    3: {
+        id: 3,
+        icon: Google_play,
+        name: 'Google Play',
+    },
+    8: {
+        id: 8,
+        icon: Netflix,
+        name: 'Netflix',
+    },
+    10: {
+        id: 10,
+        icon: Amazon_Video,
+        name: 'Amazon Video',
+    },
+    68: {
+        id: 68,
+        icon: Microsoft_Store,
+        name: 'Microsoft Store',
+    },
+    119: {
+        id: 119,
+        icon: Amazon_Prime_Video,
+        name: 'Amazon Prime',
+    },
+    167: {
+        id: 167,
+        icon: Claro_video,
+        name: 'Claro Video',
+    },
+    283: {
+        id: 283,
+        icon: Crunchyroll,
+        name: 'Crunchyroll',
+    },
+    300: {
+        id: 300,
+        icon: Pluto_TV,
+        name: 'Pluto TV',
+    },
+    307: {
+        id: 307,
+        icon: Globoplay,
+        name: 'Globoplay',
+    },
+    337: {
+        id: 337,
+        icon: Disney_Plus,
+        name: 'Disney Plus',
+    },
+    338: {
+        id: 384,
+        icon: HBO_Max,
+        name: 'HBO Max',
+    },
+    512: {
+        id: 512,
+        icon: TNTGo,
+        name: 'TNTGo',
+    },
+    531: {
+        id: 531,
+        icon: Paramount_Plus,
+        name: 'Paramount Plus',
+    },
+    571: {
+        id: 571,
+        icon: Oi_Play,
+        name: 'Oi Play',
+    },
+    619: {
+        id: 619,
+        icon: Star_Plus,
+        name: 'Star Plus',
+    },
+};
+
 export const CarouselImages = [
     [
         {

@@ -6,7 +6,7 @@ import './Item.scss'
 export default function  Item({ movie, setModalSettings }){
   
   const main = document.getElementById('main-home');
-  const cardWitdh = main.offsetWidth > 500 ? '0 0 19.7%' : '0 0 25%'
+  const cardWitdh = main.offsetWidth > 500 ? '0 0 17.7%' : '0 0 27.0%'
   
   return (
     <SliderContext.Consumer>

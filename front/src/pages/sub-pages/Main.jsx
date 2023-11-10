@@ -20,7 +20,7 @@ function TabItemContent({url, setModalSettings, setIsLoading}){
       if(data.hasOwnProperty(key) && data[key].length > 6){
         htmlElementCollection.push(
           <div className='mt-[-28px] max-w-[90vw]' key={key}>
-            <h3 className='text-primary font-semibold text-xl absolute left-2 uppercase font max-sm:text-lg'>{key}</h3>
+            <h3 className='text-primary font-semibold text-xl absolute left-10 uppercase font max-sm:text-lg'>{key}</h3>
                 <Slider>
                   {data[key].map((movie, k)=>{
                     const movieItem = {

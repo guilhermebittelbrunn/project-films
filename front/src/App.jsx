@@ -2,6 +2,7 @@ import {ConfigProvider} from 'antd'
 import { BrowserRouter } from 'react-router-dom'
 import pt_BR from 'antd/locale/pt_BR'
 import UserProvider from './context/UserContext'
+import MovieProvider from './context/MovieLists'
 import Router from './Router'
 
 
@@ -26,9 +27,6 @@ const tokeStyle = {
     colorBgBase: '#171717'
 }
 
-const drawerStyle = {
-
-}
 
 export default function App(){
     return(
@@ -36,7 +34,9 @@ export default function App(){
         <BrowserRouter>
           <ConfigProvider locale={pt_BR} theme={{components:{Select: selectStyle, Input: inputStyle}, token:tokeStyle}}>
             <UserProvider>
+              <MovieProvider>
               <Router/>
+              </MovieProvider>
             </UserProvider>
           </ConfigProvider>
         </BrowserRouter>
