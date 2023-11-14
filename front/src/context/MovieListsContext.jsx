@@ -23,11 +23,13 @@ export default function MovieProvider({children}){
     }
 
     useEffect(()=>{
-        (async()=>{
-            const res = await api.get(`/lists/${user.id}`);
-            const listOptions = res.data.map(list=>list.name)
-            setOptions(listOptions);
-        })()
+        if(user){
+            (async()=>{
+                const res = await api.get(`/lists/${user.id}`);
+                const listOptions = res.data.map(list=>list.name)
+                setOptions(listOptions);
+            })()
+        }
     },[])
 
     return(

@@ -1,36 +1,14 @@
 const { Movie, Genre, List } = require('../modules/index');
 const Streaming = require('../modules/Streaming');
-const { Op, json } = require('sequelize');
-const path = require('path');
-const fs = require('fs');
-const Colors = require('colors');
-
-function shuffle(array) {
-    var m = array.length,
-        t,
-        i;
-
-    // While there remain elements to shuffle…
-    while (m) {
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * m--);
-
-        // And swap it with the current element.
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-    }
-
-    return array;
-}
+const { Op } = require('sequelize');
 
 const MovieController = {
     get: async (req, res) => {
         const { id } = req.params;
-        const { idUser } = req.query;
+        const { idUser, raw } = req.query;
         try {
             const movie = await Movie.findByPk(id, {
-                // raw: true,
+                raw: raw,
                 attributes: {
                     exclude: ['json'],
                 },
@@ -44,7 +22,6 @@ const MovieController = {
                     {
                         model: Genre,
                         required: false,
-                        // attributes: ["name"],
                         through: [''],
                         attributes: { exclude: ['json'] },
                     },
@@ -58,62 +35,28 @@ const MovieController = {
                 ],
             });
 
-            if (movie === null) {
-                throw { msg: 'Filme não encontrado', error: msg };
-            }
-
+            if (!movie) throw { msg: 'Filme não encontrado', error: msg };
             res.send(movie);
         } catch (error) {
             res.send(error);
         }
     },
-    getByGenres: async (req, res) => {
-        const { limit, streamings } = req.query;
-        try {
-            const movies = await Movie.findAll({
-                attributes: ['id', 'title', 'sinopse', 'poster_path', 'backdrop_path', 'score_popularity'],
-                include: [
-                    {
-                        model: Genre,
-                        required: false,
-                        through: [''],
-                        attributes: { exclude: ['json'] },
-                    },
-                    {
-                        model: Streaming,
-                        required: false,
-                        through: [''],
-                        attributes: { exclude: ['json'] },
-                        where: {
-                            id: {
-                                [Op.in]: streamings ? JSON.parse(streamings) : [''],
-                            },
-                        },
-                    },
-                ],
-                limit: +limit || 300,
-                raw: true,
-                order: [['score_popularity', 'desc']],
-            });
-            const moviesByGenre = movies.reduce((acc, movie) => {
-                if (!acc[movie['genres.name']]) {
-                    acc[movie['genres.name']] = [];
-                }
-                acc[movie['genres.name']].push(movie);
-                return acc;
-            }, {});
-            for (let key in moviesByGenre) {
-                moviesByGenre[key] = shuffle(moviesByGenre[key]);
-            }
-            res.send(moviesByGenre);
-        } catch (error) {
-            res.send({ msg: 'Erro ao buscar os filmes', err: error });
-        }
-    },
-    getMovieList: async (req, res) => {
-        const { limit, title, genres, streamings, listIdApi } = req.query;
+    getAll: async (req, res) => {
+        const { limit, title, genres, streamings, listIdApi, raw } = req.query;
+        console.log({ limit, title, genres, streamings, listIdApi, raw });
+
         const whereCondition = {};
-        console.log({ limit, title, genres, streamings, listIdApi });
+
+        const includeGenre = {
+            model: Genre,
+            required: genres && JSON.parse(genres).length > 0,
+        };
+
+        const includeStreaming = {
+            model: Streaming,
+            required: streamings && JSON.parse(streamings).length > 0,
+            attributes: { exclude: ['json'] },
+        };
 
         if (title) {
             whereCondition.title = {
@@ -125,39 +68,31 @@ const MovieController = {
                 [Op.in]: JSON.parse(listIdApi),
             };
         }
+
+        if (streamings) {
+            includeStreaming.where = {
+                id: {
+                    [Op.in]: streamings ? JSON.parse(streamings) : [''],
+                },
+            };
+        }
+
+        if (genres) {
+            includeGenre.where = {
+                id: {
+                    [Op.in]: genres ? JSON.parse(genres) : [''],
+                },
+            };
+        }
+
         try {
             const movies = await Movie.findAll({
-                limit: +limit || 70,
+                limit: +limit || 100,
                 attributes: { exclude: ['json'] },
-                // raw: true,
                 order: [['score_popularity', 'desc']],
+                raw: raw,
                 where: whereCondition,
-                include:
-                    genres || streamings
-                        ? [
-                              {
-                                  model: Genre,
-                                  required: JSON.parse(genres).length > 0,
-                                  // through: [''],
-                                  where: {
-                                      id: {
-                                          [Op.in]: JSON.parse(genres),
-                                      },
-                                  },
-                              },
-                              {
-                                  model: Streaming,
-                                  required: streamings ? true : false,
-                                  // through: [''],
-                                  attributes: { exclude: ['json'] },
-                                  where: {
-                                      id: {
-                                          [Op.in]: streamings ? JSON.parse(streamings) : [''],
-                                      },
-                                  },
-                              },
-                          ]
-                        : null,
+                include: [includeGenre, includeStreaming],
             });
 
             console.log('movies.length', movies.length);

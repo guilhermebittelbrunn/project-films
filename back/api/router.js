@@ -14,8 +14,8 @@ Router.get('/user', UserController.getByEmail);
 Router.get('/user/test', authenticate, UserController.test);
 Router.get('/user/:id', authenticate, UserController.get);
 
-Router.get('/movie', MovieController.getMovieList);
-Router.get('/movie/genres', authenticate, MovieController.getByGenres);
+Router.get('/movie', MovieController.getAll);
+// Router.get('/movie/genres', authenticate, MovieController.getByGenres);
 Router.get('/movie/:id', authenticate, MovieController.get);
 
 Router.get('/genres', authenticate, GenreController.getAll);
@@ -24,6 +24,7 @@ Router.get('/genre/:id', authenticate, GenreController.get);
 Router.get('/lists/:id', authenticate, ListController.getAll);
 Router.post('/lists', authenticate, ListController.post);
 Router.post('/lists/:id', authenticate, ListController.postMovie);
+Router.delete('/list/:id', authenticate, ListController.delete);
 Router.delete('/lists/:id', authenticate, ListController.deleteMovie);
 
 module.exports = Router;

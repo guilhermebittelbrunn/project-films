@@ -5,7 +5,7 @@ import { UserOutlined, GithubOutlined, LinkedinFilled, MailOutlined, MenuOutline
 import { Drawer, Carousel } from 'antd'
 import ImageIcon from '../assets/logo.png'
 import MovieModal from "../components/MovieModal";
-import { MovieContext } from "../context/MovieLists";
+import { MovieContext } from "../context/MovieListsContext";
 
 const menuOptions = [
     {

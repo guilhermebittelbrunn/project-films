@@ -8,7 +8,7 @@ import { Select, message, Tag } from 'antd'
 import api from '../api';
 import dayjs from 'dayjs';
 import axios from 'axios';
-import {MovieContext} from '../context/MovieLists'
+import {MovieContext} from '../context/MovieListsContext'
 
 const options = {
   method: 'GET',
@@ -91,7 +91,7 @@ export default function MovieModal({id, status, setIsModalOpen, options, setOpti
                         id='content'
                         className='bg-secondery opacity-100 rounded-md border-[2px] border-primary 
                         flex flex-col justify-between  items-center absolute top-2/4 min-h-[300px]
-                        left-2/4 transform translate-x-[-50%] translate-y-[-50%] w-[95%] max-w-[500px]
+                        left-2/4 transform translate-x-[-50%] translate-y-[-50%] max-h-[98vh] w-[95%] max-w-[500px]
                     '>
                         {loading ? 
                         <Spin size='large' className='m-auto'/>
@@ -125,10 +125,10 @@ export default function MovieModal({id, status, setIsModalOpen, options, setOpti
                                     <img src={`https://image.tmdb.org/t/p/w500/${data.backdrop_path}`} alt={data.title} className='min-w-full min-h-[160px] border border-secondery rounded-t-md z-10'/>
                                     <div className='absolute gap-4 left-[0%] bottom-0 w-full flex justify-center items-centerbottom-0 z-20 py-2' style={{backgroundColor: 'rgb(0,0,0, .3)'}}>
                                         {data.streamings &&
-                                            data.streamings.map(streaming=>{
+                                            data.streamings.map((streaming, key)=>{
                                                 const provider = images[streaming.id];
                                                 return(
-                                                    <Tooltip title={provider?.name} key={provider?.id}>
+                                                    <Tooltip title={provider?.name} key={`${provider?.id}${key}`}>
                                                         <img src={provider?.icon} className='w-[35px] rounded-full transition-all hover:scale-150' alt={provider?.name}/>
                                                     </Tooltip>
                                                 ) 
@@ -223,7 +223,7 @@ function Tab1({data, user, id, handleClickMovieList, handleCreateList, selectedI
             </div>
         </div>
 
-        <p id='modal-section' className='text-sm mx-4 pr-2 my-2 text-justify h-[169px] overflow-auto rounded-lg max-sm:max-h-[100px]'>{data.sinopse}</p>
+        <p id='modal-section' className='text-sm mx-4 pr-2 my-2 text-justify max-h-[120px] overflow-auto rounded-lg max-sm:max-h-[100px]'>{data.sinopse}</p>
         <span className='text-sm text-primary ml-4 font-medium'>Listas</span>
         <div id='bts' className='flex flex-col justify-center items-center gap-2  px-4 pb-2 w-full'>
             <div className='flex w-full m-auto justify-center items-center gap-1'>

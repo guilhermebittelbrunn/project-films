@@ -2,7 +2,7 @@ import {ConfigProvider} from 'antd'
 import { BrowserRouter } from 'react-router-dom'
 import pt_BR from 'antd/locale/pt_BR'
 import UserProvider from './context/UserContext'
-import MovieProvider from './context/MovieLists'
+import MovieProvider from './context/MovieListsContext'
 import Router from './Router'
 
 

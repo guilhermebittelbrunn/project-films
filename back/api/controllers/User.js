@@ -53,7 +53,6 @@ const UserController = {
                 include: {
                     model: Streaming,
                     required: false,
-                    // through: [''],
                     attributes: { exclude: ['json'] },
                 },
             });
@@ -87,11 +86,9 @@ const UserController = {
                 include: {
                     model: Streaming,
                     required: true,
-                    through: [''],
                     attributes: { exclude: ['json'] },
                 },
             });
-            // console.log(user);
             if (user) {
                 const { password, ...userData } = user.dataValues;
                 return res.status(200).send(userData);

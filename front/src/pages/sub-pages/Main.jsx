@@ -1,7 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext, useContext } from 'react';
 import { Spin, Tabs } from 'antd';
 import Slider from '../../components/Slider'
 import useFetch from '../../hooks/useFetch';
+import { UserContext } from '../../context/UserContext';
+
+function shuffle(array) {
+    var m = array.length, t, i;
+    while (m) {
+        i = Math.floor(Math.random() * m--);
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+    return array;
+}
 
 function TabItemContent({url, setModalSettings, setIsLoading}){
   const [movieHTMLComponents, setMovieHTMLComponents] = useState([]);
@@ -13,16 +25,26 @@ function TabItemContent({url, setModalSettings, setIsLoading}){
 
   useEffect(() => {
     if(loading || error || !data) return
+
     const htmlElementCollection = [];
+
+    const moviesByGenre = data.reduce((acc, movie) => {
+      if (!acc[movie['genres.name']]){
+        acc[movie['genres.name']] = [];
+      } 
+      acc[movie['genres.name']].push(movie);
+      return acc;
+    }, {});
     
-    for(let key in data){
-      // eslint-disable-next-line no-prototype-builtins
-      if(data.hasOwnProperty(key) && data[key].length > 6){
+
+    for(let key in moviesByGenre){
+      moviesByGenre[key] = shuffle(moviesByGenre[key]);
+      if(moviesByGenre.hasOwnProperty(key) && moviesByGenre[key].length > 6){
         htmlElementCollection.push(
           <div className='mt-[-28px] max-w-[90vw]' key={key}>
             <h3 className='text-primary font-semibold text-xl absolute left-10 uppercase font max-sm:text-lg'>{key}</h3>
                 <Slider>
-                  {data[key].map((movie, k)=>{
+                  {moviesByGenre[key].map((movie, k)=>{
                     const movieItem = {
                       id: movie.id,
                       image: `https://image.tmdb.org/t/p/w200${movie.poster_path}`,
@@ -64,9 +86,10 @@ function TabItemContent({url, setModalSettings, setIsLoading}){
 
 
 export default function Main({modalSettings, setModalSettings}){
-  const [url,setUrl] = useState('/movie/genres');
+  const {user} = useContext(UserContext);
+  const [url,setUrl] = useState(`/movie?limit=200&raw=true&stregs=[${user}]`);
   const [isLoading, setIsLoading] = useState(true);
-  
+  console.log(user)
 
   const tabItems = [
     {
@@ -83,10 +106,10 @@ export default function Main({modalSettings, setModalSettings}){
 
   function handleTabChange(e){
       if(e === '1'){
-          setUrl('/movie/genres');
+          setUrl(`/movie?limit=200&raw=true`);
       }
       else{
-        setUrl('/movie/genres');
+        setUrl(`/movie?limit=200&raw=true`);
       }
   }
 

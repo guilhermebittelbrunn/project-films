@@ -84,8 +84,8 @@ const ListController = {
         try {
             const list = await List.findByPk(id);
             if (list) {
-                await list.destroy();
-                return res.status(200).send('list deleted successfully');
+                const data = await list.destroy();
+                return res.status(200).send({ msg: 'list deleted successfully', data });
             }
             throw 'list not found';
         } catch (error) {
