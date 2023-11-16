@@ -179,7 +179,6 @@ function Tab1({data, user, id, handleClickMovieList, handleCreateList, selectedI
 
         try{
             const res = await api.post('/lists', {idUser: user.id, name: popConfirmInputValue});
-            console.log('add list', res);
             setOptions(res.data.map(list=>list.name));
         }catch(err){
             if(err.response?.data.error){

@@ -51,6 +51,7 @@ export default function UserProvider({children}){
                 const {id} = JSON.parse(atob(token.split('.')[1]));
                 try {
                     const {data} = await api.get(`user/${id}`);
+                    console.log(data);
                     setUser(data);
                 } catch (error) {
                     console.log(error);

@@ -18,7 +18,7 @@ export default function Router(){
             <Route path='/' element={<Home title='Home' subtitle='Explore filmes diversos'><Main/></Home>}/>  
             <Route path='/lists' element={<PriveteRoute><Home title='Minhas Listas' subtitle='Explore e crie novas listas'><Lists/></Home></PriveteRoute>}/>  
             <Route path='/search' element={<PriveteRoute><Home title='Buscar' subtitle='Busque pelos seus filmes favoritos'><Search/></Home></PriveteRoute>}/>  
-            <Route path='/profile' element={<PriveteRoute><Home title='Perfil' subtitle='Informações básicas'><Profile/></Home></PriveteRoute>}/>  
+            <Route path='/profile' element={<PriveteRoute><Home title='Perfil' subtitle=''><Profile/></Home></PriveteRoute>}/>  
             <Route path='*' element={<PageNotFound/>}/>  
         </Routes>
     )

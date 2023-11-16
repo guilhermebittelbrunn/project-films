@@ -78,8 +78,8 @@ export default function Home({children, title, subtitle}){
                             <h1 className="text-4xl max-sm:text-3xl">{title}</h1>
                             <h2 className="text-2xl max-sm:text-xl">{subtitle}</h2>
                         </header>
-                        <div className="min-h-[600px] flex flex-col justify-center items-center"> 
-                            <div>
+                        <div className="min-h-[600px] flex flex-col justify-center items-center w-full"> 
+                            <div className="w-full">
                                 {React.Children.map(children, child => {
                                     // Verifica se o elemento filho é válido antes de cloná-lo
                                     if (React.isValidElement(child)) {

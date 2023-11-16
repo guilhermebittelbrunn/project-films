@@ -24,13 +24,10 @@ export default function MovieProvider({children}){
 
     useEffect(()=>{
         if(user){
-            (async()=>{
-                const res = await api.get(`/lists/${user.id}`);
-                const listOptions = res.data.map(list=>list.name)
-                setOptions(listOptions);
-            })()
+            const listOptions = user.Lists.map(list=>list.name);
+            setOptions(listOptions);
         }
-    },[])
+    },[user]);
 
     return(
         <MovieContext.Provider value={{options, setOptions, selectedItems, setSelectedItems, postMovieList, removeMovieList}}>
