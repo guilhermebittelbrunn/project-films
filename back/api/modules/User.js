@@ -1,8 +1,8 @@
-const { db, DataTypes, Sequelize } = require("../../database/sequelize");
-const Streaming = require("./Streaming");
-const List = require("./List");
+const { db, DataTypes, Sequelize } = require('../../database/sequelize');
+const Streaming = require('./Streaming');
+const List = require('./List');
 
-const User = db.define("User", {
+const User = db.define('User', {
     id: {
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -27,20 +27,22 @@ const User = db.define("User", {
 });
 
 User.belongsToMany(Streaming, {
-    through: "userStreaming",
-    foreignKey: "idUser",
+    through: 'userStreaming',
+    foreignKey: 'idUser',
     constraints: true,
 });
 
 Streaming.belongsToMany(User, {
-    through: "userStreaming",
-    foreignKey: "idStreaming",
+    through: 'userStreaming',
+    foreignKey: 'idStreaming',
     constraints: true,
 });
 
+User.hasMany(List, { foreignKey: 'idUser' });
+
 List.belongsTo(User, {
     foreignKey: {
-        name: "idUser",
+        name: 'idUser',
         allowNull: false,
     },
     constraints: true,

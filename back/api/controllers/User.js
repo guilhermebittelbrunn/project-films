@@ -2,7 +2,7 @@ const { User, List, Movie, Streaming } = require('../modules/index');
 const bcrypt = require('bcryptjs');
 const JWT = require('jsonwebtoken');
 const colors = require('colors');
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 
 const UserController = {
     post: async (req, res) => {
@@ -32,13 +32,8 @@ const UserController = {
                     },
                 },
             });
-            listMovies.forEach((movie) => {
-                movie.setLists(newList[0]);
-            });
-            listStreamings.forEach((streaming) => {
-                streaming.setUsers(newUser);
-            });
-
+            newList[0].setMovies(listMovies);
+            newUser.setStreamings(listStreamings);
             res.status(201).send({ message: 'user created succesfully', userName: newUser.dataValues.name });
         } catch (err) {
             console.log(err);
@@ -50,13 +45,25 @@ const UserController = {
         try {
             const user = await User.findOne({
                 where: { email },
-                include: {
-                    model: Streaming,
-                    required: false,
-                    attributes: { exclude: ['json'] },
-                },
+                include: [
+                    {
+                        model: Streaming,
+                        required: false,
+                        attributes: { exclude: ['json'] },
+                    },
+                    {
+                        model: List,
+                        required: false,
+                        include: [
+                            {
+                                model: Movie,
+                                required: false,
+                                attributes: { exclude: ['json'] },
+                            },
+                        ],
+                    },
+                ],
             });
-            console.log(user);
             if (!user) {
                 throw 'e-mail or password incorrect';
             }
@@ -83,11 +90,24 @@ const UserController = {
                 throw 'access denied, token id is not the same as id paramam';
             }
             const user = await User.findByPk(id, {
-                include: {
-                    model: Streaming,
-                    required: true,
-                    attributes: { exclude: ['json'] },
-                },
+                include: [
+                    {
+                        model: Streaming,
+                        required: false,
+                        attributes: { exclude: ['json'] },
+                    },
+                    {
+                        model: List,
+                        required: false,
+                        include: [
+                            {
+                                model: Movie,
+                                required: false,
+                                attributes: { exclude: ['json'] },
+                            },
+                        ],
+                    },
+                ],
             });
             if (user) {
                 const { password, ...userData } = user.dataValues;
@@ -106,8 +126,56 @@ const UserController = {
         }
         res.status(200).send(true);
     },
-    test: (req, res) => {
-        res.send({ ok: true });
+    put: async (req, res) => {
+        const { id } = req.params;
+        const { name, email } = req.query;
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        try {
+            const user = await User.findByPk(id, {
+                include: [
+                    {
+                        model: List,
+                        required: false,
+                        include: [
+                            {
+                                model: Movie,
+                                required: false,
+                                attributes: { exclude: ['json'] },
+                            },
+                        ],
+                    },
+                    {
+                        model: Streaming,
+                        required: true,
+                        attributes: { exclude: ['json'] },
+                    },
+                ],
+            });
+            if (String(name).trim() !== '') {
+                user.name = name;
+                await user.save();
+            }
+            if (email !== user.email) {
+                const isEmailAlreadyExists = await User.findOne({ where: { email } });
+                if (user.email === email) {
+                    return;
+                }
+                if (user.email !== email && isEmailAlreadyExists) {
+                    throw 'e-mail already in use';
+                }
+                if (!regex.test(email)) {
+                    throw 'email is not a valid email';
+                }
+                user.email = email;
+                await user.save();
+            }
+            const { password, ...userInformation } = user.dataValues;
+            res.send({ user: userInformation });
+        } catch (error) {
+            console.log(error);
+            res.send({ msg: 'error occurred saving information about user', error });
+        }
     },
 };
 
