@@ -2,18 +2,14 @@ import { UserOutlined, RetweetOutlined } from '@ant-design/icons'
 import { Input, Tooltip, Collapse, message } from 'antd'
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../../context/UserContext"
-import { MovieContext } from "../../context/MovieListsContext"
 import {listOfStreaming} from '../../assets/images'
 import api from "../../api";
 
-
 export default function Profile(){
     const { handleLogout, user, setUser } = useContext(UserContext);
-    const {selectedItems, options} = useContext(MovieContext);
     const [name, setName] = useState(user.name);
     const [email, setEmail] = useState(user.email);
     const [providersList, setProvidersList] = useState([]);
-    const [statistic, setStatistic] = useState({sumActiveProviders: '', sumListWithMovies: '', sumMinutesWatched: ''});
     
     const sumActiveProviders = providersList.reduce((acc, provider) =>{
         if(provider.status){
@@ -21,29 +17,25 @@ export default function Profile(){
         }
         return acc
     },0)
-    
+
+    const sumListWithMovies = user.Lists.reduce((acc,list)=>{
+        if(list.movies.length > 0){
+            acc += 1;
+        };
+        return acc
+    },0)
+
+    const sumMinutesWatched = countMinutesWatched();
+
+
     function countMinutesWatched(){
         const watchedList = user.Lists.filter(list=>list.name === "Assistidos")[0];
-        if(!watchedList)return 0;
         const minutes = watchedList.movies.reduce((acc, movie)=>{
             acc += movie.duration ? movie.duration : 0; 
             return acc;
         }, 0);
         return minutes
     }
-
-
-    useEffect(()=>{
-        const sumListWithMovies = user.Lists.reduce((acc,list)=>{
-            if(list.movies.length > 0){
-                acc += 1;
-            };
-            return acc
-        },0)
-    
-        const sumMinutesWatched = countMinutesWatched();
-        setStatistic({sumActiveProviders, sumListWithMovies, sumMinutesWatched});
-    },[selectedItems, options, user])
 
 
     useEffect(()=>{
@@ -120,7 +112,7 @@ export default function Profile(){
                 <div id="tags" className='flex w-full justify-center items-center gap-4 max-sm:flex-col'>
                     <div className='w-[180px] flex flex-col justify-center items-center max-sm:max-w-[340px] max-sm:w-full'>
                         <div id="header" className='bg-primary w-full text-center py-2 border rounded-t-lg border-backgroundOne'>
-                            {statistic.sumMinutesWatched}
+                            {sumMinutesWatched}
                         </div>
                         <div id="body" className='w-full text-center bg-neutral-900 py-1 border-backgroundOne border rounded-b-lg'>
                             Minutos assistidos
@@ -128,7 +120,7 @@ export default function Profile(){
                     </div>
                     <div className='w-[180px] flex flex-col justify-center items-center max-sm:max-w-[340px] max-sm:w-full'>
                         <div id="header" className='bg-primary w-full text-center py-2 border rounded-t-lg border-backgroundOne'>
-                            {statistic.sumListWithMovies}
+                            {sumListWithMovies}
                         </div>
                         <div id="body" className='w-full text-center bg-neutral-900 py-1 border-backgroundOne border rounded-b-lg'>
                             Listas criadas
@@ -136,7 +128,7 @@ export default function Profile(){
                     </div>
                     <div className='w-[180px] flex flex-col justify-center items-center max-sm:max-w-[340px] max-sm:w-full'>
                         <div id="header" className='bg-primary w-full text-center py-2 border rounded-t-lg border-backgroundOne'>
-                            {statistic.sumActiveProviders}
+                            {sumActiveProviders}
                         </div>
                         <div id="body" className='w-full text-center bg-neutral-900 py-1 border-backgroundOne border rounded-b-lg'>
                             Plataformas
@@ -225,7 +217,7 @@ export default function Profile(){
                            
                                 <div>
                                     <ul>
-                                        {statistic.sumListWithMovies > 0 ? 
+                                        {sumListWithMovies > 0 ? 
                                             <>
                                                 {user.Lists.map(list=>{
                                                     if(list.movies.length > 0){

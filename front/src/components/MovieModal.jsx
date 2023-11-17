@@ -23,7 +23,7 @@ export default function MovieModal({id, status, setIsModalOpen, options, setOpti
     if(!id || !status)return
     
     const {postMovieList, removeMovieList, selectedItems, setSelectedItems} = useContext(MovieContext);
-    const {user, setUser} = useContext(UserContext);
+    const {user} = useContext(UserContext);
     const {data, loading, error} = useFetch(`movie/${id}?idUser=${user.id}`);
     const [activeTab, setActiveTab] = useState('1');
     const [tabItems, setTabItems] = useState([])
@@ -169,7 +169,7 @@ export default function MovieModal({id, status, setIsModalOpen, options, setOpti
 }
 
 
-function Tab1({data, user, id, handleClickMovieList, handleCreateList, selectedItems, options, setOptions, removeMovieList, findListInSelectedItems, postMovieList}){
+function Tab1({data, user, id, handleClickMovieList, handleCreateList, selectedItems, setSelectedItems, options, setOptions, removeMovieList, findListInSelectedItems, postMovieList}){
 
     const [popConfirmInputValue, setPopConfirmInputValue] = useState('');
     const filteredOptions = options.filter((o) => !selectedItems.includes(o));
@@ -179,7 +179,6 @@ function Tab1({data, user, id, handleClickMovieList, handleCreateList, selectedI
 
         try{
             const res = await api.post('/lists', {idUser: user.id, name: popConfirmInputValue});
-            console.log(res.data);
             setOptions(res.data.map(list=>list.name));
         }catch(err){
             if(err.response?.data.error){

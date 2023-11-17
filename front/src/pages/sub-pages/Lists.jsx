@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from '../../context/UserContext'
 import Slider from "../../components/Slider";
-import { Spin, Popconfirm } from "antd";
+import { Spin } from "antd";
 import { MovieContext } from "../../context/MovieListsContext";
 import api from "../../api";
 import { CloseOutlined } from '@ant-design/icons'
@@ -54,13 +54,11 @@ export default function Lists({setModalSettings}){
                                 <div className="flex w-full justify-between items-center aboslute mb-[-24px]">
                                     <h3 className='text-primary font-semibold text-xl uppercase font ml-10 max-sm:text-lg z-20'>{list.name}</h3>
                                     {/* {(list.name !== 'Favoritos' &&) && */}
-                                        <Popconfirm placement='topLeft' onConfirm={()=>{deleteList(list.id)}} title="Essa ação irá deletar todos os filmes junto da lista">
-                                            <CloseOutlined 
-                                                className="text-primary z-20 font-bold hover:cursor-pointer
-                                                transition-all hover:scale-110 text-xl"
-                                                // onClick={()=>{}}
-                                            />
-                                        </Popconfirm>
+                                        <CloseOutlined 
+                                            className="text-primary z-20 font-bold hover:cursor-pointer
+                                            transition-all hover:scale-110 text-xl"
+                                            onClick={()=>{deleteList(list.id)}}
+                                        />
                                     {/* } */}
                                 </div>
                                 <Slider>
