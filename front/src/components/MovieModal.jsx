@@ -8,7 +8,6 @@ import { Select, message, Tag } from 'antd'
 import api from '../api';
 import dayjs from 'dayjs';
 import axios from 'axios';
-import {MovieContext} from '../context/MovieListsContext'
 
 const options = {
   method: 'GET',
@@ -19,11 +18,11 @@ const options = {
 };
 
 
-export default function MovieModal({id, status, setIsModalOpen, options, setOptions}){
+export default function MovieModal({id, status, setIsModalOpen}){
     if(!id || !status)return
-    
-    const {postMovieList, removeMovieList, selectedItems, setSelectedItems} = useContext(MovieContext);
     const {user} = useContext(UserContext);
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [options, setOptions] = useState([]);
     const {data, loading, error} = useFetch(`movie/${id}?idUser=${user.id}`);
     const [activeTab, setActiveTab] = useState('1');
     const [tabItems, setTabItems] = useState([])
@@ -45,11 +44,23 @@ export default function MovieModal({id, status, setIsModalOpen, options, setOpti
          
     }
 
+    async function postMovieList(listName, id){
+        const res = await api.post(`/lists/${user.id}`, {name:listName, idMovie: id});
+        setSelectedItems(pv=>{
+            return [...pv, res.data.name]
+        });
+    }
+    async function removeMovieList(listName, id){
+        const res = await api.delete(`/lists/${id}?name=${listName}`);
+        setSelectedItems(selectedItems.filter(item=>item !== res.data.name));
+    }
 
     useEffect(() => {
         if(loading && error)return
-        if(data.Lists){
+        if(data.Lists && user){
             setSelectedItems(data?.Lists.map(list=>list.name));
+            const listOptions = user.Lists.map(list=>list.name);
+            setOptions(listOptions);
         }
     }, [data])
 
