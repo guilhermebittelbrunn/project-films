@@ -377,8 +377,8 @@ function Tab2({id, setIsModalOpen, setActiveTab}){
                                 return(
                                     <div key={movie.id} className='w-[24%] hover:cursor-pointer' onClick={()=>{handleClickRecommendation(movie.id)}}>
                                             <Tooltip title={movie.title}>
-                                            {/* <img src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} alt={data.title}/> */}
-                                                <img className=' rounded-md w-full' src='https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg' alt={data.title}/>
+                                            <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title}/>
+                                                {/* <img className=' rounded-md w-full' src='https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg' alt={data.title}/> */}
                                             </Tooltip>
                                     </div>
                                 )
