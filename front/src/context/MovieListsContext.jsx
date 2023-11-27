@@ -16,6 +16,9 @@ export default function MovieProvider({children}){
         setSelectedItems(pv=>{
             return [...pv, res.data.name]
         });
+        setOptions(pv=>{
+            return [...pv, res.data.name]
+        });
     }
     async function removeMovieList(listName, id){
         const res = await api.delete(`/lists/${id}?name=${listName}`);
@@ -24,8 +27,11 @@ export default function MovieProvider({children}){
 
     useEffect(()=>{
         if(user){
-            const listOptions = user.Lists.map(list=>list.name);
-            setOptions(listOptions);
+            (async()=>{
+                const res = await api.get(`/lists/${user.id}`);
+                const listOptions = res.data.map(list=>list.name)
+                setOptions(listOptions);
+            })()
         }
     },[user]);
 
