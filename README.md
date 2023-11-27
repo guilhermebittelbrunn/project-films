@@ -21,7 +21,8 @@ yarn server
 ```
 Lembre-se de criar uma conta no https://developer.themoviedb.org/reference/intro/getting-started para
 definir uma key e acessar as recomendações
+##
 ![](https://github.com/guilhermebittelbrunn/project-films/blob/main/gif.gif)
 ## Licença
 
-[MIT](https://choosealicense.com/licenses/mit/)`enter code here`
+[MIT](https://choosealicense.com/licenses/mit/)`
