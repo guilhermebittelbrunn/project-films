@@ -16,7 +16,7 @@ const menuOptions = [
     {
         id: 2,
         path: '/lists',
-        label: 'Listas'
+        label: 'Listass'
     },
     {
         id: 3,
