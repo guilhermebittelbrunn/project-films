@@ -134,18 +134,18 @@ export default function MovieModal({id, status, setIsModalOpen}){
                             
                                 <div className='relative flex justify-center items-center w-full'>
                                     <img src={`https://image.tmdb.org/t/p/w500/${data.backdrop_path}`} alt={data.title} className='min-w-full min-h-[160px] border border-secondery rounded-t-md z-10'/>
+                                    {data.streamings.length > 0  &&
                                     <div className='absolute gap-4 left-[0%] bottom-0 w-full flex justify-center items-centerbottom-0 z-20 py-2' style={{backgroundColor: 'rgb(0,0,0, .3)'}}>
-                                        {data.streamings &&
-                                            data.streamings.map((streaming, key)=>{
+                                            {data.streamings.map((streaming, key)=>{
                                                 const provider = images[streaming.id];
                                                 return(
                                                     <Tooltip title={provider?.name} key={`${provider?.id}${key}`}>
                                                         <img src={provider?.icon} className='w-[35px] rounded-full transition-all hover:scale-150' alt={provider?.name}/>
                                                     </Tooltip>
                                                 ) 
-                                            })
-                                        }
+                                            })}
                                     </div>
+                                    }
                                     <Spin className='absolute left-[45%] top-24' size='large'/>
                                 </div>
                                 
@@ -371,14 +371,14 @@ function Tab2({id, setIsModalOpen, setActiveTab}){
                 error ? 
                     <h1>Erro: {error}</h1>
                 :
-                    <div className='flex w-full flex-wrap justify-center items-center gap-3 px-3'>
+                    <div id='movie-section' className='flex w-full max-h-[300px] overflow-auto  flex-wrap justify-center items-center gap-3 px-3'>
                         {
                             data.map(movie=>{
                                 return(
-                                    <div key={movie.id} className='w-[26.5%] max-sm:w-[29%] hover:cursor-pointer' onClick={()=>{handleClickRecommendation(movie.id)}}>
+                                    <div key={movie.id} className='w-[24%] hover:cursor-pointer' onClick={()=>{handleClickRecommendation(movie.id)}}>
                                             <Tooltip title={movie.title}>
                                             {/* <img src={`https://image.tmdb.org/t/p/w500/${data.poster_path}`} alt={data.title}/> */}
-                                                <img className='w-full rounded-md' src='https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg' alt={data.title}/>
+                                                <img className=' rounded-md w-full' src='https://image.tmdb.org/t/p/w200/1E5baAaEse26fej7uHcjOgEE2t2.jpg' alt={data.title}/>
                                             </Tooltip>
                                     </div>
                                 )

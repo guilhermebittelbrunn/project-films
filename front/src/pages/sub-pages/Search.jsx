@@ -79,7 +79,7 @@ export default function SearchSection({setModalSettings}){
                 </div>
             </div>
             <div>
-                <div id='movie-section' className='flex flex-wrap justify-center gap-2 w-full overflow-auto h-[800px]'>
+                <div id='movie-section' className='flex flex-wrap justify-center gap-2 w-full overflow-auto max-h-[800px]'>
                     {movies.length > 0 ?
                         movies.map((movie, key)=>{
                             return(

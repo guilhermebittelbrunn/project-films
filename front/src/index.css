@@ -53,7 +53,24 @@ body{
     border: 1px solid #09B54E;
 }
 
+#modal-section::-webkit-scrollbar {
+    /* width of the entire scrollbar */
+    width: 4px;
+}
 
+#modal-section::-webkit-scrollbar-track {
+    /* color of the tracking area */
+    background: #171717;
+}
+
+#modal-section::-webkit-scrollbar-thumb {
+    /* color of the scroll thumb */
+    background-color: #09B54E;
+    /* roundness of the scroll thumb */
+    border-radius: 20px;
+    /* creates padding around scroll thumb */
+    border: 1px solid #09B54E;
+}
 
     
     

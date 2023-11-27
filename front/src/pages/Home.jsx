@@ -42,7 +42,7 @@ export default function Home({children, title, subtitle}){
             <nav className="flex w-full justify-between text-lg py-2">
                 <div className="flex gap-2 justify-center items-center">
                     <Link to='/'>
-                        <img src={ImageIcon} width={200} alt="logo" />
+                        {/* <img src={ImageIcon} width={200} alt="logo" /> */}
                     </Link>
                     {/* <h2>CineSync</h2> */}
                 </div>
@@ -123,57 +123,57 @@ export default function Home({children, title, subtitle}){
                             <div className="w-1/4 rounded-xl border-primary">
                                 <Carousel autoplay autoplaySpeed={3500} speed={1800} pauseOnHover={false} dots={false} focusOnSelect={false} >
                                     <div>
-                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/bDqY2AYYdZQykEhmDr87i8RKKTT.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/11LIbjsgnshbwtxC6oLyxduboDO.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/wDWAA5QApz5L5BKfFaaj8HJCAQM.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/8tBhAn6qVRQzf5yvEcxjgPMgTkw.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-xl max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/n2HcaD1dEVrwXlSFJD7GmcqHSxv.jpg'}/>
                                     </div>
                                 </Carousel>
                             </div>
                             <div className="w-5/12 rounded-full border-primary">
                                 <Carousel autoplay autoplaySpeed={3500} speed={1800} pauseOnHover={false} dots={false} focusOnSelect={false}>
                                     <div>
-                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/9EnfMH0nTPCna87Mh3G8Q6W2wze.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/jv7lyPfBC1heRWtQUd1gX7Q0wSo.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/7QsY7Jo3ZgL3pa1kdo28TA7Z6qo.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/ArDXxgsELJanwYDXd60MLTZDiSj.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[500px]  rounded-xl max-lg:h-[460px] max-md:h-[420px] max-sm:h-[340px]" src={'https://image.tmdb.org/t/p/w500/itYONYDHpJqTuu8BCXAtHxgpglq.jpg'}/>
                                     </div>
                                 </Carousel>
                             </div>
                             <div className="w-1/4 rounded-xl border-primary ">
                                 <Carousel autoplay autoplaySpeed={3500} speed={1800} pauseOnHover={false} dots={false} focusOnSelect={false}>
                                     <div>
-                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/x0naXPYoLxzTzRgwKhzAjQPngnw.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/hfSkDDJiCf6cJpd4R9O9lM1T6hz.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/2BWhcrlPr6UvSJy5D044Ikq2QxH.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/zEqwfO5R2LrrLgV61xm8M9TmNTG.jpg'}/>
                                     </div>
                                     <div>
-                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'}/>
+                                        <img className="h-[400px] rounded-lg max-lg:h-[340px] max-md:h-[300px] max-sm:h-[240px]" src={'https://image.tmdb.org/t/p/w500/vvWyOCmBAND2p9UwaXZdALIDd2W.jpg'}/>
                                     </div>
                                 </Carousel>
                             </div>
@@ -233,7 +233,7 @@ export default function Home({children, title, subtitle}){
                             className="font-semibold transition-all hover:cursor-pointer 
                             py-2 text-red-500 border border-red-500
                             hover:border-red-700 hover:text-red-700 w-full"
-                            onClick={handleLogout}
+                            onClick={()=>{handleLogout();setOpen(false)}}
                         >
                             Sair
                         </button>
