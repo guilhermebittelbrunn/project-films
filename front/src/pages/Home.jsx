@@ -42,7 +42,7 @@ export default function Home({children, title, subtitle}){
             <nav className="flex w-full justify-between text-lg py-2">
                 <div className="flex gap-2 justify-center items-center">
                     <Link to='/'>
-                        {/* <img src={ImageIcon} width={200} alt="logo" /> */}
+                        <img src={ImageIcon} alt="logo" className="md:w-[160px] sm:w-[120px] max-sm:w-[120px]"/>
                     </Link>
                     {/* <h2>CineSync</h2> */}
                 </div>
@@ -211,7 +211,7 @@ export default function Home({children, title, subtitle}){
                 </ul>
             </footer>
 
-            <Drawer title="Logo" placement="right" open={open} onClose={()=>{setOpen(false)}} width={'70%'} closeIcon={false}>
+            <Drawer title="CineRec" placement="right" open={open} onClose={()=>{setOpen(false)}} width={'70%'} closeIcon={false}>
                 <div className="flex flex-col h-[100%] justify-between py-4">
                     <ul className="flex flex-col justify-evenly w-full gap-4 items-center py-20">
                     {menuOptions.map(option=>{
