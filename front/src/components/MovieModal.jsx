@@ -58,9 +58,12 @@ export default function MovieModal({id, status, setIsModalOpen}){
     useEffect(() => {
         if(loading && error)return
         if(data.Lists && user){
+            (async()=>{
+                const res = await api.get(`/lists/${user.id}`);
+                const listOptions = res.data.map(list=>list.name)
+                setOptions(listOptions);
+            })();
             setSelectedItems(data?.Lists.map(list=>list.name));
-            const listOptions = user.Lists.map(list=>list.name);
-            setOptions(listOptions);
         }
     }, [data])
 

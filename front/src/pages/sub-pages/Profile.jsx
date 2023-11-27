@@ -102,6 +102,24 @@ export default function Profile(){
         setProvidersList(x);
     }
 
+    function handleCancel(){
+        if(user.streamings){
+            const newProviderList = listOfStreaming.map(provider=>{
+                const index = user.streamings.find(streaming=>streaming.id === provider.id);
+                if(index){
+                    return{...provider, status:true}
+                }else{
+                    return{...provider, status:false}
+                }
+            });
+            setProvidersList(newProviderList);
+        }
+        else{
+            const newProviderList = listOfStreaming.map(streaming=>{return{...streaming, status:false}});
+            setProvidersList(newProviderList);
+        }
+    }
+
     return(
         <div className="w-full flex flex-col gap-6 items-center justify-center">
             <header className='flex flex-col gap-4 w-full'>
@@ -187,6 +205,7 @@ export default function Profile(){
                                             className='w-[140px] border border-neutral-950 
                                             rounded-lg py-2 px-4 transition-all
                                             hover:border-red-600 hover:text-red-600'
+                                            onClick={handleCancel}
                                         >
                                             Cancelar
                                         </button>

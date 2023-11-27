@@ -19,6 +19,7 @@ export default function MovieProvider({children}){
         setOptions(pv=>{
             return [...pv, res.data.name]
         });
+        user.Lists = selectedItems;
     }
     async function removeMovieList(listName, id){
         const res = await api.delete(`/lists/${id}?name=${listName}`);
