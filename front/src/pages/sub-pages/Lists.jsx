@@ -16,7 +16,7 @@ export default function Lists({setModalSettings}){
 
     async function deleteList(id){
         try {
-            const res = await api.delete(`/list/${id}`);
+            const res = await api.delete(`/lists/${id}`);
             console.log(res);
         } catch (error) {
             console.log(error);
